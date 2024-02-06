@@ -3,6 +3,8 @@
 
 #include <string>
 
+#include "Location.hpp"
+
 using namespace std;
 
 // Forward declaration to avoid circular dependencies
@@ -20,14 +22,9 @@ private:
    string userName;
 
    /**
-    * @brief The X-coordinate of the game user.
+    * @brief Pointer to the Location object representing the user's position in the game.
    */
-   int x;
-
-   /**
-    * @brief The Y-coordinate of the game user.
-   */
-   int y;
+   Location* location;
 
    /**
     * @brief The number of collected points by the game user.
@@ -45,7 +42,28 @@ public:
     *
     * @param userName The username of the game user.
    */
-   GameUser(string userName);
+   GameUser();
+
+   /**
+    * @brief Sets the username for the game user.
+    *
+    * @param userName The username of the game user.
+   */
+   void setUserName(string userName);
+
+   /**
+    * @brief Gets the username of the game user.
+    *
+    * @return The username.
+   */
+   string getUserName();
+
+   /**
+    * @brief Gets the Location object representing the user's position in the game.
+    *
+    * @return Pointer to the Location object.
+   */
+   Location* getLocation();
 
    /**
     * @brief Sets the room for the game user has joined.
