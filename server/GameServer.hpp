@@ -19,19 +19,19 @@ class GameServer {
 
 public:
    /**
-    * Constructor for the GameServer class.
+    * @brief Constructor for the GameServer class.
    */
    GameServer();
 
    /**
-    * Runs the WebSocket server on the specified port.
+    * @brief Runs the WebSocket server on the specified port.
     * 
     * @param port The port on which the server should listen.
    */
    void run(uint16_t port);
 
    /**
-    * Broadcasts a message to all connected clients.
+    * @brief Broadcasts a message to all connected clients.
     *
     * @param message The message to broadcast.
    */
@@ -45,7 +45,7 @@ private:
    vector<GameUser*> users;
 
    /**
-    * Callback method called when a message is received from a client.
+    * @brief Callback method called when a message is received from a client.
     *
     * @param s Pointer to the WebSocket server instance.
     * @param hdl The connection handle.
@@ -54,14 +54,14 @@ private:
    void on_message(WsServer *s, ConnectionHdl hdl, WsServer::message_ptr msg);
 
    /**
-    * Callback method called when a new client connection is opened.
+    * @brief Callback method called when a new client connection is opened.
     *
     * @param hdl The connection handle.
    */
    void on_open(ConnectionHdl hdl);
 
    /**
-    * Callback method called when a client connection is closed.
+    * @brief Callback method called when a client connection is closed.
     *
     * @param hdl The connection handle.
    */

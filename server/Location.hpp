@@ -63,6 +63,7 @@ public:
 
    /**
     * @brief Gets the X-coordinate of the location.
+    * 
     * @return The X-coordinate.
    */
    int getX();
