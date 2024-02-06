@@ -6,6 +6,9 @@
 #include <iostream>
 #include <set>
 
+#include "GameRoom.hpp"
+#include "GameUser.hpp"
+
 using namespace std;
 using namespace websocketpp;
 using WsServer = server<config::asio>;
@@ -37,6 +40,9 @@ public:
 private:
    WsServer wsServer;
    set<ConnectionHdl, owner_less<ConnectionHdl>> connections;
+
+   vector<GameRoom*> rooms;
+   vector<GameUser*> users;
 
    /**
     * Callback method called when a message is received from a client.
