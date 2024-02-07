@@ -6,6 +6,7 @@
 #include <iostream>
 #include <set>
 
+#include "TagPool.hpp"
 #include "GameRoom.hpp"
 #include "GameUser.hpp"
 
@@ -14,7 +15,29 @@ using namespace websocketpp;
 using WsServer = server<config::asio>;
 using ConnectionHdl = connection_hdl;
 
+/**
+ * @brief Enumerates the different types of messages exchanged between the server and clients.
+*/
+enum class MessageType : uint8_t {
+   TagAssignment = 0x00, /**< Indicates a system message for assigning player tags. */
+   CreateRoom = 0x01     /**< Indicates a system message for creating a new game room. */
+};
 
+/**
+ * @brief Enumerates the different types of player update messages exchanged between the server and clients.
+*/
+enum class PlayerUpdateType : uint8_t {
+   CreateRoom = 0x00, /**< Request for creating a new game room. */
+   ListRooms = 0x01,  /**< Request for creating a new game room. */
+   JoinRoom = 0x02,   /**< Request for joining a specific game room. */
+   LeaveRoom = 0x03,  /**< Request for leaving the current game room. */
+   Move = 0x04,       /**< Request for updating the player's movement in the game. */
+   SendMessage = 0x05 /**< Request for sending a chat message. */
+};
+
+/**
+ * @brief Represents the WebSocket server for the game.
+*/
 class GameServer {
 
 public:
@@ -41,8 +64,16 @@ private:
    WsServer wsServer;
    set<ConnectionHdl, owner_less<ConnectionHdl>> connections;
 
+   TagPool* tagPool;
    vector<GameRoom*> rooms;
-   vector<GameUser*> users;
+   map<array<byte, 2>, GameUser*> users;
+
+   /**
+    * @brief Callback method called when a new client connection is opened.
+    *
+    * @param hdl The connection handle.
+   */
+   void onOpen(ConnectionHdl hdl);
 
    /**
     * @brief Callback method called when a message is received from a client.
@@ -51,21 +82,86 @@ private:
     * @param hdl The connection handle.
     * @param msg The received message.
    */
-   void on_message(WsServer *s, ConnectionHdl hdl, WsServer::message_ptr msg);
-
-   /**
-    * @brief Callback method called when a new client connection is opened.
-    *
-    * @param hdl The connection handle.
-   */
-   void on_open(ConnectionHdl hdl);
+   void onMessage(WsServer *s, ConnectionHdl hdl, WsServer::message_ptr msg);
 
    /**
     * @brief Callback method called when a client connection is closed.
     *
     * @param hdl The connection handle.
    */
-   void on_close(ConnectionHdl hdl);
+   void onClose(ConnectionHdl hdl);
+
+   /**
+    * @brief Sends a message to a specific connection.
+    * 
+    * @param connection The connection handle to which the message should be sent.
+    * @param message The message to send.
+   */
+   void sendMessage(ConnectionHdl connection, string message);
+
+   /**
+    * @brief Handles incoming system messages.
+    * 
+    * @param hdl The connection handle.
+    * @param msg The received message.
+   */
+   void handleSystemMessage(ConnectionHdl hdl, WsServer::message_ptr msg);
+
+   /**
+    * @brief Handles incoming player update messages.
+    * 
+    * @param hdl The connection handle.
+    * @param msg The received message.
+   */
+   void handlePlayerUpdateMessage(ConnectionHdl hdl, WsServer::message_ptr msg);
+
+   /**
+    * @brief Handles the CreateRoom player update message.
+    * 
+    * @param hdl The connection handle.
+    * @param msg The received message.
+   */
+   void GameServer::handleCreateRoom(ConnectionHdl hdl, WsServer::message_ptr msg);
+
+   /**
+    * @brief Handles the ListRooms player update message.
+    * 
+    * @param hdl The connection handle.
+    * @param msg The received message.
+   */
+   void GameServer::handleListRooms(ConnectionHdl hdl, WsServer::message_ptr msg);
+
+   /**
+    * @brief Handles the JoinRoom player update message.
+    * 
+    * @param hdl The connection handle.
+    * @param msg The received message.
+   */
+   void GameServer::handleJoinRoom(ConnectionHdl hdl, WsServer::message_ptr msg);
+
+   /**
+    * @brief Handles the LeaveRoom player update message.
+    * 
+    * @param hdl The connection handle.
+    * @param msg The received message.
+   */
+   void GameServer::handleLeaveRoom(ConnectionHdl hdl, WsServer::message_ptr msg);
+
+   /**
+    * @brief Handles the Move player update message.
+    * 
+    * @param hdl The connection handle.
+    * @param msg The received message.
+   */
+   void GameServer::handleMove(ConnectionHdl hdl, WsServer::message_ptr msg);
+
+   /**
+    * @brief Handles the SendMessage player update message.
+    * 
+    * @param hdl The connection handle.
+    * @param msg The received message.
+   */
+   void GameServer::handleSendMessage(ConnectionHdl hdl, WsServer::message_ptr msg);
 };
 
 #endif // GAME_SERVER_HPP
