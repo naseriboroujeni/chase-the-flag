@@ -3,23 +3,35 @@
 #include <cstdint>
 
 TagPool::TagPool() {
-   for (uint8_t firstByte = 0; firstByte <= 255; ++firstByte) {
-      for (uint8_t secondByte = 0; secondByte <= 255; ++secondByte) {
-         array<byte, 2> tag = {(byte)firstByte, (byte)secondByte};
-         availableTags.insert(tag);
-      }
-   }
+   nextTag = {byte(0), byte(0)};
 }
 
 array<byte, 2> TagPool::allocateTag() {
-   auto it = availableTags.begin();
-   array<byte, 2> allocatedTag = *it;
-   availableTags.erase(it);
-   return allocatedTag;
+   array<byte, 2> tag;
+
+   if (!availableTags.empty()) {
+      tag = availableTags.front();
+      availableTags.pop();
+   }
+   else {
+      if (nextTag[1] == byte(255)) {
+         if (nextTag[0] == byte(255)) {
+            // TODO
+         }
+         nextTag[0] = static_cast<byte>(static_cast<int>(nextTag[0]) + 1);
+         nextTag[1] = byte(0);
+      }
+      else {
+         nextTag[1] = static_cast<byte>(static_cast<int>(nextTag[1]) + 1);
+      }
+      tag = nextTag;
+   }
+
+   return tag;
 }
 
 void TagPool::deallocateTag(const array<byte, 2> &tag) {
-   availableTags.insert(tag);
+   availableTags.push(tag);
 }
 
 TagPool::~TagPool() {

@@ -2,9 +2,11 @@
 #define TAG_POOL_HPP
 
 #include <array>
-#include <set>
+#include <queue>
 
 using namespace std;
+
+const int TAG_SIZE = 2;
 
 /**
  * @brief A class representing a pool of unique 2-byte tags that can be allocated and deallocated.
@@ -15,11 +17,12 @@ private:
    /**
     * @brief Set of available 2-byte tags in the pool.
    */
-   set<array<byte, 2>> availableTags;
+   queue<array<byte, TAG_SIZE>> availableTags;
+   array<byte, TAG_SIZE> nextTag;
 
 public:
    /**
-    * @brief Constructor for the TagPool class. Initializes the pool with all possible 2-byte tags.
+    * @brief Constructor for the TagPool class.
    */
    TagPool();
 
