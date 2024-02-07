@@ -74,8 +74,11 @@ void GameServer::handleSystemMessage(ConnectionHdl hdl, WsServer::message_ptr ms
 }
 
 void GameServer::handlePlayerUpdateMessage(ConnectionHdl hdl, WsServer::message_ptr msg) {
-   uint8_t playerUpdateTypeByte = msg->get_payload()[1];
 
+   array<byte, 2> playerTag = {byte(msg->get_payload()[1]), byte(msg->get_payload()[2])};
+   GameUser* player = users[playerTag];
+
+   uint8_t playerUpdateTypeByte = msg->get_payload()[3];
    PlayerUpdateType playerUpdateType = static_cast<PlayerUpdateType>(playerUpdateTypeByte);
 
    switch (playerUpdateType) {
