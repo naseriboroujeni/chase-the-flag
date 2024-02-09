@@ -19,8 +19,8 @@ using ConnectionHdl = connection_hdl;
  * @brief Enumerates the different types of messages exchanged between the server and clients.
 */
 enum class MessageType : uint8_t {
-   TagAssignment = 0x00, /**< Indicates a system message for assigning player tags. */
-   CreateRoom = 0x01     /**< Indicates a system message for creating a new game room. */
+   SystemMessage = 0x00, /**< Represents a system message exchanged between the server and clients. */
+   PlayerUpdate = 0x01   /**< Represents a player update message exchanged between the server and clients. */
 };
 
 /**
@@ -121,7 +121,7 @@ private:
     * @param hdl The connection handle.
     * @param msg The received message.
    */
-   void GameServer::handleCreateRoom(ConnectionHdl hdl, WsServer::message_ptr msg);
+   void handleCreateRoom(ConnectionHdl hdl, WsServer::message_ptr msg);
 
    /**
     * @brief Handles the ListRooms player update message.
@@ -129,7 +129,7 @@ private:
     * @param hdl The connection handle.
     * @param msg The received message.
    */
-   void GameServer::handleListRooms(ConnectionHdl hdl, WsServer::message_ptr msg);
+   void handleListRooms(ConnectionHdl hdl, WsServer::message_ptr msg);
 
    /**
     * @brief Handles the JoinRoom player update message.
@@ -137,7 +137,7 @@ private:
     * @param hdl The connection handle.
     * @param msg The received message.
    */
-   void GameServer::handleJoinRoom(ConnectionHdl hdl, WsServer::message_ptr msg);
+   void handleJoinRoom(ConnectionHdl hdl, WsServer::message_ptr msg);
 
    /**
     * @brief Handles the LeaveRoom player update message.
@@ -145,7 +145,7 @@ private:
     * @param hdl The connection handle.
     * @param msg The received message.
    */
-   void GameServer::handleLeaveRoom(ConnectionHdl hdl, WsServer::message_ptr msg);
+   void handleLeaveRoom(ConnectionHdl hdl, WsServer::message_ptr msg);
 
    /**
     * @brief Handles the Move player update message.
@@ -153,7 +153,7 @@ private:
     * @param hdl The connection handle.
     * @param msg The received message.
    */
-   void GameServer::handleMove(ConnectionHdl hdl, WsServer::message_ptr msg);
+   void handleMove(ConnectionHdl hdl, WsServer::message_ptr msg);
 
    /**
     * @brief Handles the SendMessage player update message.
@@ -161,7 +161,7 @@ private:
     * @param hdl The connection handle.
     * @param msg The received message.
    */
-   void GameServer::handleSendMessage(ConnectionHdl hdl, WsServer::message_ptr msg);
+   void handleSendMessage(ConnectionHdl hdl, WsServer::message_ptr msg);
 };
 
 #endif // GAME_SERVER_HPP

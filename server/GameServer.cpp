@@ -60,12 +60,24 @@ void GameServer::onClose(ConnectionHdl hdl) {
 
 void GameServer::onMessage(WsServer *s, ConnectionHdl hdl, WsServer::message_ptr msg) {
 
-   uint8_t messageTypeByte = msg->get_payload()[0];
+   if (msg->get_payload().empty()) {
+      cerr << "Received empty message from client." << endl;
+      return;
+   }
 
-   if (messageTypeByte == 0x00) {
-      handleSystemMessage(hdl, msg);
-   } else if (messageTypeByte == 0x01) {
-      handlePlayerUpdateMessage(hdl, msg);
+   uint8_t messageTypeByte = msg->get_payload()[0];
+   MessageType messageType = static_cast<MessageType>(messageTypeByte);
+
+   switch (messageType) {
+      case MessageType::SystemMessage:
+         handleSystemMessage(hdl, msg);
+         break;
+      case MessageType::PlayerUpdate:
+         handlePlayerUpdateMessage(hdl, msg);
+         break;
+      default:
+         cerr << "Unknown message type: " << static_cast<int>(messageType) << endl;
+         break;
    }
 }
 
