@@ -2,6 +2,8 @@
 
 #include <cstdint>
 
+#include "GameExceptions.hpp"
+
 TagPool::TagPool() {
    nextTag = {byte(0), byte(0)};
 }
@@ -16,7 +18,7 @@ array<byte, 2> TagPool::allocateTag() {
    else {
       if (nextTag[1] == byte(255)) {
          if (nextTag[0] == byte(255)) {
-            // TODO
+            throw NoAvailableTagsException();
          }
          nextTag[0] = static_cast<byte>(static_cast<int>(nextTag[0]) + 1);
          nextTag[1] = byte(0);
