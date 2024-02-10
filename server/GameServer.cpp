@@ -131,10 +131,20 @@ void GameServer::handlePlayerUpdateMessage(ConnectionHdl hdl, WsServer::message_
 }
 
 void GameServer::handleCreateRoom(ConnectionHdl hdl, WsServer::message_ptr msg) {
-   // TODO
+   string roomName = msg->get_payload().substr(4);
+   auto it = rooms.find(roomName);
+   if (it != rooms.end()) {
+      throw DuplicatedRoomNameException();
+   }
+
+   GameRoom* newRoom = new GameRoom(roomName);
+   rooms[roomName] = newRoom;
 }
 
 void GameServer::handleListRooms(ConnectionHdl hdl, WsServer::message_ptr msg) {
+   if (msg->get_payload().size() != 4) {
+      throw InvalidMessageException();
+   }
    // TODO
 }
 

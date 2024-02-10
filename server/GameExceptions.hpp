@@ -31,4 +31,11 @@ public:
    }
 };
 
+class DuplicatedRoomNameException : public std::exception {
+public:
+   const char* what() const noexcept override {
+      return "Room name is duplicated.";
+   }
+};
+
 #endif // GAME_EXCEPTIONS_HPP
