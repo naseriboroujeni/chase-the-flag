@@ -1,5 +1,7 @@
 #include "GameServer.hpp"
 
+#include "GameExceptions.hpp"
+
 GameServer::GameServer() {
 
    this->lobby = new GameRoom("Lobby");
@@ -96,6 +98,8 @@ void GameServer::handleSystemMessage(ConnectionHdl hdl, WsServer::message_ptr ms
       case SystemMessageType::ListRooms:
          handleListRooms(hdl, msg);
          break;
+      default:
+         throw InvalidMessageException();
    }
 }
 
@@ -121,7 +125,7 @@ void GameServer::handlePlayerUpdateMessage(ConnectionHdl hdl, WsServer::message_
          handleLeaveRoom(hdl, msg);
          break;
       default:
-         cerr << "Unknown player update type: " << static_cast<int>(playerUpdateType) << endl;
+         throw InvalidMessageException();
     }
 }
 
@@ -143,23 +147,19 @@ void GameServer::handleLeaveRoom(ConnectionHdl hdl, WsServer::message_ptr msg) {
 
 void GameServer::handleMove(GameUser* player, WsServer::message_ptr msg) {
 
-   // Ensure that the sender is in a valid room
    if (player->getRoom() == nullptr || player->getRoom() == lobby) {
-      cerr << "Error: Player not in a valid room." << endl;
-      return;
+      throw NotInAValidRoomException();
    }
 
-   // Ensure that the message payload is of the expected size
    if (msg->get_payload().size() != 5) {
-      cerr << "Error: Invalid message payload size for Move update." << endl;
-      return;
+      throw InvalidMessageException();
    }
 
    // Extract the move type from the message payload
-    MoveType moveType = static_cast<MoveType>(msg->get_payload()[4]);
+   MoveType moveType = static_cast<MoveType>(msg->get_payload()[4]);
 
-    // Update the player's location based on the move type
-    switch (moveType) {
+   // Update the player's location based on the move type
+   switch (moveType) {
       case MoveType::UP:
          player->getLocation()->goUp();
          break;
@@ -173,18 +173,15 @@ void GameServer::handleMove(GameUser* player, WsServer::message_ptr msg) {
          player->getLocation()->goLeft();
          break;
       default:
-         cerr << "Error: Unknown move type." << endl;
-         return;
+         throw InvalidMessageException();
    }
 }
 
 void GameServer::handleSendMessage(GameUser* msgSender, WsServer::message_ptr msg) {
    string messageContent = msg->get_payload().substr(4);
 
-   // Ensure that the sender is in a valid room
    if (msgSender->getRoom() == nullptr) {
-      cerr << "Error: User not in a valid room." << endl;
-      return;
+      throw NotInAValidRoomException();
    }
 
    // Construct the formatted message to be broadcasted
