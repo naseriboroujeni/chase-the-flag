@@ -122,7 +122,7 @@ void GameServer::handlePlayerUpdateMessage(ConnectionHdl hdl, WsServer::message_
          handleJoinRoom(hdl, msg);
          break;
       case PlayerUpdateType::LeaveRoom:
-         handleLeaveRoom(hdl, msg);
+         handleLeaveRoom(player, msg);
          break;
       default:
          throw InvalidMessageException();
@@ -141,8 +141,14 @@ void GameServer::handleJoinRoom(ConnectionHdl hdl, WsServer::message_ptr msg) {
    // TODO
 }
 
-void GameServer::handleLeaveRoom(ConnectionHdl hdl, WsServer::message_ptr msg) {
-   // TODO
+void GameServer::handleLeaveRoom(GameUser* player, WsServer::message_ptr msg) {
+
+   if (player->getRoom() == nullptr || player->getRoom() == lobby) {
+      throw NotInAValidRoomException();
+   }
+
+   player->getRoom()->removeUser(player);
+   player->setRoom(lobby);
 }
 
 void GameServer::handleMove(GameUser* player, WsServer::message_ptr msg) {
