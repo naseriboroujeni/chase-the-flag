@@ -35,7 +35,8 @@ void GameServer::onOpen(ConnectionHdl hdl) {
 
    array<byte, 2> tag = tagPool->allocateTag();
    GameUser *user = new GameUser(tag);
-   users[tag] = user;
+   user->setRoom(this->lobby);
+   this->users[tag] = user;
 
    try {
       wsServer.send(hdl, tag.data(), 2, frame::opcode::binary);
