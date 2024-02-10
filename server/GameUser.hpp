@@ -2,6 +2,7 @@
 #define GAME_USER_HPP
 
 #include <string>
+#include <array>
 
 #include "Location.hpp"
 
@@ -16,6 +17,11 @@ class GameRoom;
 class GameUser {
 
 private:
+   /**
+    * @brief The tag assigned to user.
+   */
+   array<byte, 2> userTag;
+
    /**
     * @brief The username of the game user.
    */
@@ -42,7 +48,7 @@ public:
     *
     * @param userName The username of the game user.
    */
-   GameUser();
+   GameUser(array<byte, 2> userTag);
 
    /**
     * @brief Sets the username for the game user.

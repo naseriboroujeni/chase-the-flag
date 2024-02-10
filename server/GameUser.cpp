@@ -1,7 +1,8 @@
 #include "GameRoom.hpp"
 #include "GameUser.hpp"
 
-GameUser::GameUser() {
+GameUser::GameUser(array<byte, 2> userTag) {
+   this->userTag = userTag;
    this->userName = "";
    this->location = new Location();
    this->collectedPoints = 0;
