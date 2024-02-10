@@ -66,7 +66,7 @@ public:
     *
     * @param message The message to broadcast.
    */
-   void broadcastMessage(const string &message);
+   void broadcastMessage(GameRoom* room, const string &message);
 
 private:
    WsServer wsServer;
@@ -167,10 +167,10 @@ private:
    /**
     * @brief Handles the SendMessage player update message.
     * 
-    * @param hdl The connection handle.
+    * @param msgSender Pointer to the GameUser object representing the sender of the message.
     * @param msg The received message.
    */
-   void handleSendMessage(ConnectionHdl hdl, WsServer::message_ptr msg);
+   void handleSendMessage(GameUser* msgSender, WsServer::message_ptr msg);
 };
 
 #endif // GAME_SERVER_HPP

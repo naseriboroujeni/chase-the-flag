@@ -24,17 +24,17 @@ void GameServer::run(uint16_t port) {
    wsServer.run();
 }
 
-void GameServer::broadcastMessage(const string &message) {
+void GameServer::broadcastMessage(GameRoom* room, const string &message) {
 
-   for (auto &connection : connections) {
-      this->sendMessage(connection, message);
+   for (auto &user : room->getAllUsers()) {
+      this->sendMessage(*user->getConnection(), message);
    }
 }
 
 void GameServer::onOpen(ConnectionHdl hdl) {
 
    array<byte, 2> tag = tagPool->allocateTag();
-   GameUser *user = new GameUser(tag, hdl);
+   GameUser *user = new GameUser(tag, &hdl);
    user->setRoom(this->lobby);
    this->users[tag] = user;
 
@@ -112,7 +112,7 @@ void GameServer::handlePlayerUpdateMessage(ConnectionHdl hdl, WsServer::message_
          handleMove(hdl, msg);
          break;
       case PlayerUpdateType::SendMessage:
-         handleSendMessage(hdl, msg);
+         handleSendMessage(player, msg);
          break;
       case PlayerUpdateType::JoinRoom:
          handleJoinRoom(hdl, msg);
@@ -145,6 +145,18 @@ void GameServer::handleMove(ConnectionHdl hdl, WsServer::message_ptr msg) {
    // TODO
 }
 
-void GameServer::handleSendMessage(ConnectionHdl hdl, WsServer::message_ptr msg) {
-   // TODO
+void GameServer::handleSendMessage(GameUser* msgSender, WsServer::message_ptr msg) {
+   string messageContent = msg->get_payload().substr(4);
+
+   // Ensure that the sender is in a valid room
+   if (msgSender->getRoom() == nullptr) {
+      cerr << "Error: User not in a valid room." << endl;
+      return;
+   }
+
+   // Construct the formatted message to be broadcasted
+   string formattedMessage = "[" + msgSender->getUserName() + "]: " + messageContent;
+
+   // Broadcast the message to all users in the same room
+   broadcastMessage(msgSender->getRoom(), formattedMessage);
 }
