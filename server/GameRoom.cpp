@@ -3,7 +3,8 @@
 
 #include <algorithm>
 
-GameRoom::GameRoom() {
+GameRoom::GameRoom(string name) {
+   this->name = name;
 }
 
 void GameRoom::addUser(GameUser* joinedUser) {

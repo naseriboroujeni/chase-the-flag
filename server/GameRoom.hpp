@@ -16,6 +16,11 @@ class GameRoom
 
 private:
    /**
+    * @brief String that indicates room's name.
+   */
+   string name;
+
+   /**
     * @brief Vector to store the users joined in the room.
    */
    vector<GameUser*> joinedUsers;
@@ -24,7 +29,7 @@ public:
    /**
     * @brief Default constructor for the GameRoom class.
    */
-   GameRoom();
+   GameRoom(string name);
 
    /**
     * @brief Adds a user to the game room.
