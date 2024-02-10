@@ -84,8 +84,6 @@ void GameServer::onMessage(WsServer *wsServer, ConnectionHdl hdl, WsServer::mess
 }
 
 void GameServer::handleSystemMessage(ConnectionHdl hdl, WsServer::message_ptr msg) {
-   array<byte, 2> playerTag = {byte(msg->get_payload()[1]), byte(msg->get_payload()[2])};
-   GameUser* player = users[playerTag];
 
    uint8_t systemMessageTypeByte = msg->get_payload()[3];
    SystemMessageType systemMessageType = static_cast<SystemMessageType>(systemMessageTypeByte);
