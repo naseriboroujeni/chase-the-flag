@@ -1,6 +1,8 @@
 #ifndef LOCATION_HPP
 #define LOCATION_HPP
 
+#include <cstdint>
+
 enum class MoveType : uint8_t {
    UP = 0x00,
    DOWN = 0x01,
