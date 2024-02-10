@@ -53,11 +53,21 @@ public:
     *
     * @param userName The username of the game user.
    */
-   GameUser(array<byte, 2> userTag, ConnectionHdl connection);
+   GameUser(array<byte, 2> userTag, ConnectionHdl* connection);
 
+   /**
+    * @brief Gets the tag assigned to the game user.
+    *
+    * @return The user tag.
+   */
    array<byte, 2> getTag();
 
-   ConnectionHdl getConnection();
+   /**
+    * @brief Gets the WebSocket connection handle for the user.
+    *
+    * @return Pointer to the connection handle.
+   */
+   ConnectionHdl* getConnection();
 
    /**
     * @brief Sets the username for the game user.
