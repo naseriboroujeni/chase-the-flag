@@ -82,7 +82,26 @@ void GameServer::onMessage(WsServer *s, ConnectionHdl hdl, WsServer::message_ptr
 }
 
 void GameServer::handleSystemMessage(ConnectionHdl hdl, WsServer::message_ptr msg) {
-   // TODO
+   array<byte, 2> playerTag = {byte(msg->get_payload()[1]), byte(msg->get_payload()[2])};
+   GameUser* player = users[playerTag];
+
+   uint8_t systemMessageTypeByte = msg->get_payload()[3];
+   SystemMessageType systemMessageType = static_cast<SystemMessageType>(systemMessageTypeByte);
+
+   switch (systemMessageType) {
+      case SystemMessageType::CreateRoom:
+         handleCreateRoom(hdl, msg);
+         break;
+      case SystemMessageType::ListRooms:
+         handleListRooms(hdl, msg);
+         break;
+      case SystemMessageType::JoinRoom:
+         handleJoinRoom(hdl, msg);
+         break;
+      case SystemMessageType::LeaveRoom:
+         handleLeaveRoom(hdl, msg);
+         break;
+   }
 }
 
 void GameServer::handlePlayerUpdateMessage(ConnectionHdl hdl, WsServer::message_ptr msg) {
@@ -94,18 +113,6 @@ void GameServer::handlePlayerUpdateMessage(ConnectionHdl hdl, WsServer::message_
    PlayerUpdateType playerUpdateType = static_cast<PlayerUpdateType>(playerUpdateTypeByte);
 
    switch (playerUpdateType) {
-      case PlayerUpdateType::CreateRoom:
-         handleCreateRoom(hdl, msg);
-         break;
-      case PlayerUpdateType::ListRooms:
-         handleListRooms(hdl, msg);
-         break;
-      case PlayerUpdateType::JoinRoom:
-         handleJoinRoom(hdl, msg);
-         break;
-      case PlayerUpdateType::LeaveRoom:
-         handleLeaveRoom(hdl, msg);
-         break;
       case PlayerUpdateType::Move:
          handleMove(hdl, msg);
          break;

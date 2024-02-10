@@ -23,16 +23,19 @@ enum class MessageType : uint8_t {
    PlayerUpdate = 0x01   /**< Represents a player update message exchanged between the server and clients. */
 };
 
-/**
- * @brief Enumerates the different types of player update messages exchanged between the server and clients.
-*/
-enum class PlayerUpdateType : uint8_t {
+enum class SystemMessageType : uint8_t {
    CreateRoom = 0x00, /**< Request for creating a new game room. */
    ListRooms = 0x01,  /**< Request for creating a new game room. */
    JoinRoom = 0x02,   /**< Request for joining a specific game room. */
    LeaveRoom = 0x03,  /**< Request for leaving the current game room. */
-   Move = 0x04,       /**< Request for updating the player's movement in the game. */
-   SendMessage = 0x05 /**< Request for sending a chat message. */
+};
+
+/**
+ * @brief Enumerates the different types of player update messages exchanged between the server and clients.
+*/
+enum class PlayerUpdateType : uint8_t {
+   Move = 0x00,       /**< Request for updating the player's movement in the game. */
+   SendMessage = 0x01 /**< Request for sending a chat message. */
 };
 
 /**
