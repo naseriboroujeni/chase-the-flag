@@ -4,12 +4,12 @@
 #include <string>
 #include <array>
 
-#include <websocketpp/config/asio_no_tls.hpp>
+#include <websocketpp/common/connection_hdl.hpp>
 
 #include "Location.hpp"
 
 using namespace std;
-using ConnectionHdl = connection_hdl;
+using ConnectionHdl = websocketpp::connection_hdl;
 
 // Forward declaration to avoid circular dependencies
 class GameRoom;
