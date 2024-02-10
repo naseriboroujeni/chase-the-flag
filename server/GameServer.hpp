@@ -6,60 +6,171 @@
 #include <iostream>
 #include <set>
 
+#include "TagPool.hpp"
+#include "GameRoom.hpp"
+#include "GameUser.hpp"
+
 using namespace std;
 using namespace websocketpp;
 using WsServer = server<config::asio>;
 using ConnectionHdl = connection_hdl;
 
+/**
+ * @brief Enumerates the different types of messages exchanged between the server and clients.
+*/
+enum class MessageType : uint8_t {
+   SystemMessage = 0x00, /**< Represents a system message exchanged between the server and clients. */
+   PlayerUpdate = 0x01   /**< Represents a player update message exchanged between the server and clients. */
+};
 
+/**
+ * @brief Enumerates the different types of system messages exchanged between the server and clients.
+ * These message types does not require user's specific tag.
+*/
+enum class SystemMessageType : uint8_t {
+   CreateRoom = 0x00, /**< Request for creating a new game room. */
+   ListRooms = 0x01,  /**< Request for creating a new game room. */
+};
+
+/**
+ * @brief Enumerates the different types of player update messages exchanged between the server and clients.
+ * These message types require user's specific tag.
+*/
+enum class PlayerUpdateType : uint8_t {
+   Move = 0x00,        /**< Request for updating the player's movement in the game. */
+   SendMessage = 0x01, /**< Request for sending a chat message. */
+   JoinRoom = 0x02,    /**< Request for joining a specific game room. */
+   LeaveRoom = 0x03,   /**< Request for leaving the current game room. */
+};
+
+/**
+ * @brief Represents the WebSocket server for the game.
+*/
 class GameServer {
 
 public:
    /**
-    * Constructor for the GameServer class.
+    * @brief Constructor for the GameServer class.
    */
    GameServer();
 
    /**
-    * Runs the WebSocket server on the specified port.
+    * @brief Runs the WebSocket server on the specified port.
     * 
     * @param port The port on which the server should listen.
    */
    void run(uint16_t port);
 
    /**
-    * Broadcasts a message to all connected clients.
+    * @brief Broadcasts a message to all connected clients.
     *
     * @param message The message to broadcast.
    */
-   void broadcast_message(const string &message);
+   void broadcastMessage(GameRoom* room, const string &message);
 
 private:
    WsServer wsServer;
    set<ConnectionHdl, owner_less<ConnectionHdl>> connections;
 
+   TagPool* tagPool;
+   GameRoom* lobby;
+   map<array<byte, 2>, GameUser*> users;
+   map<string, GameRoom*> rooms;
+
    /**
-    * Callback method called when a message is received from a client.
+    * @brief Callback method called when a new client connection is opened.
     *
-    * @param s Pointer to the WebSocket server instance.
+    * @param hdl The connection handle.
+   */
+   void onOpen(ConnectionHdl hdl);
+
+   /**
+    * @brief Callback method called when a message is received from a client.
+    *
+    * @param wsServer Pointer to the WebSocket server instance.
     * @param hdl The connection handle.
     * @param msg The received message.
    */
-   void on_message(WsServer *s, ConnectionHdl hdl, WsServer::message_ptr msg);
+   void onMessage(WsServer *wsServer, ConnectionHdl hdl, WsServer::message_ptr msg);
 
    /**
-    * Callback method called when a new client connection is opened.
+    * @brief Callback method called when a client connection is closed.
     *
     * @param hdl The connection handle.
    */
-   void on_open(ConnectionHdl hdl);
+   void onClose(ConnectionHdl hdl);
 
    /**
-    * Callback method called when a client connection is closed.
-    *
-    * @param hdl The connection handle.
+    * @brief Sends a message to a specific connection.
+    * 
+    * @param connection The connection handle to which the message should be sent.
+    * @param message The message to send.
    */
-   void on_close(ConnectionHdl hdl);
+   void sendMessage(ConnectionHdl connection, string message);
+
+   /**
+    * @brief Handles incoming system messages.
+    * 
+    * @param hdl The connection handle.
+    * @param msg The received message.
+   */
+   void handleSystemMessage(ConnectionHdl hdl, WsServer::message_ptr msg);
+
+   /**
+    * @brief Handles incoming player update messages.
+    * 
+    * @param hdl The connection handle.
+    * @param msg The received message.
+   */
+   void handlePlayerUpdateMessage(ConnectionHdl hdl, WsServer::message_ptr msg);
+
+   /**
+    * @brief Handles the CreateRoom player update message.
+    * 
+    * @param hdl The connection handle.
+    * @param msg The received message.
+   */
+   void handleCreateRoom(ConnectionHdl hdl, WsServer::message_ptr msg);
+
+   /**
+    * @brief Handles the ListRooms player update message.
+    * 
+    * @param hdl The connection handle.
+    * @param msg The received message.
+   */
+   void handleListRooms(ConnectionHdl hdl, WsServer::message_ptr msg);
+
+   /**
+    * @brief Handles the JoinRoom player update message.
+    * 
+    * @param player Pointer to the GameUser object representing the player.
+    * @param msg The received message.
+   */
+   void handleJoinRoom(GameUser* player, WsServer::message_ptr msg);
+
+   /**
+    * @brief Handles the LeaveRoom player update message.
+    * 
+    * @param player Pointer to the GameUser object representing the player.
+    * @param msg The received message.
+   */
+   void handleLeaveRoom(GameUser* player, WsServer::message_ptr msg);
+
+   /**
+    * @brief Handles the Move player update message.
+    * 
+    * @param player Pointer to the GameUser object representing the player.
+    * @param msg The received message.
+   */
+   void handleMove(GameUser* player, WsServer::message_ptr msg);
+
+   /**
+    * @brief Handles the SendMessage player update message.
+    * 
+    * @param msgSender Pointer to the GameUser object representing the sender of the message.
+    * @param msg The received message.
+   */
+   void handleSendMessage(GameUser* msgSender, WsServer::message_ptr msg);
 };
 
 #endif // GAME_SERVER_HPP
