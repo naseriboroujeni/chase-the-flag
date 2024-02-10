@@ -74,6 +74,7 @@ private:
 
    TagPool* tagPool;
    vector<GameRoom*> rooms;
+   GameRoom* lobby;
    map<array<byte, 2>, GameUser*> users;
 
    /**

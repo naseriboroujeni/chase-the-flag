@@ -2,7 +2,9 @@
 
 GameServer::GameServer() {
 
-   tagPool = new TagPool();
+   this->lobby = new GameRoom("Lobby");
+
+   this->tagPool = new TagPool();
 
    wsServer.set_message_handler([this](ConnectionHdl hdl, WsServer::message_ptr msg)
                                 { onMessage(&wsServer, hdl, msg); });
