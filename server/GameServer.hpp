@@ -73,9 +73,9 @@ private:
    set<ConnectionHdl, owner_less<ConnectionHdl>> connections;
 
    TagPool* tagPool;
-   vector<GameRoom*> rooms;
    GameRoom* lobby;
    map<array<byte, 2>, GameUser*> users;
+   map<string, GameRoom*> rooms;
 
    /**
     * @brief Callback method called when a new client connection is opened.
@@ -143,10 +143,10 @@ private:
    /**
     * @brief Handles the JoinRoom player update message.
     * 
-    * @param hdl The connection handle.
+    * @param player Pointer to the GameUser object representing the player.
     * @param msg The received message.
    */
-   void handleJoinRoom(ConnectionHdl hdl, WsServer::message_ptr msg);
+   void handleJoinRoom(GameUser* player, WsServer::message_ptr msg);
 
    /**
     * @brief Handles the LeaveRoom player update message.

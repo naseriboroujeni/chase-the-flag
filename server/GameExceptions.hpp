@@ -24,4 +24,11 @@ public:
    }
 };
 
+class RoomNotFoundException : public std::exception {
+public:
+   const char* what() const noexcept override {
+      return "Room not found.";
+   }
+};
+
 #endif // GAME_EXCEPTIONS_HPP

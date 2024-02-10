@@ -5,6 +5,7 @@
 GameServer::GameServer() {
 
    this->lobby = new GameRoom("Lobby");
+   this->rooms["LOBBY"] = lobby;
 
    this->tagPool = new TagPool();
 
@@ -119,7 +120,7 @@ void GameServer::handlePlayerUpdateMessage(ConnectionHdl hdl, WsServer::message_
          handleSendMessage(player, msg);
          break;
       case PlayerUpdateType::JoinRoom:
-         handleJoinRoom(hdl, msg);
+         handleJoinRoom(player, msg);
          break;
       case PlayerUpdateType::LeaveRoom:
          handleLeaveRoom(player, msg);
@@ -137,11 +138,27 @@ void GameServer::handleListRooms(ConnectionHdl hdl, WsServer::message_ptr msg) {
    // TODO
 }
 
-void GameServer::handleJoinRoom(ConnectionHdl hdl, WsServer::message_ptr msg) {
-   // TODO
+void GameServer::handleJoinRoom(GameUser* player, WsServer::message_ptr msg) {
+   if (player->getRoom() == nullptr || player->getRoom() != lobby) {
+      throw NotInAValidRoomException();
+   }
+
+   string roomName = msg->get_payload().substr(4);
+   auto it = rooms.find(roomName);
+   if (it == rooms.end()) {
+      throw RoomNotFoundException();
+   }
+
+   GameRoom* joiningRoom = it->second;
+   lobby->removeUser(player);
+   player->setRoom(joiningRoom);
 }
 
 void GameServer::handleLeaveRoom(GameUser* player, WsServer::message_ptr msg) {
+
+   if (msg->get_payload().size() != 4) {
+      throw InvalidMessageException();
+   }
 
    if (player->getRoom() == nullptr || player->getRoom() == lobby) {
       throw NotInAValidRoomException();
