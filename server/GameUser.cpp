@@ -1,9 +1,10 @@
 #include "GameRoom.hpp"
 #include "GameUser.hpp"
 
-GameUser::GameUser(array<byte, 2> userTag) {
+GameUser::GameUser(array<byte, 2> userTag, ConnectionHdl connection) {
    this->userTag = userTag;
    this->userName = "";
+   this->connection = connection;
    this->location = new Location();
    this->collectedPoints = 0;
    this->joinedRoom = NULL;

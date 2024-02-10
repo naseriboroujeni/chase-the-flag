@@ -66,7 +66,7 @@ public:
     *
     * @param message The message to broadcast.
    */
-   void broadcast_message(const string &message);
+   void broadcastMessage(const string &message);
 
 private:
    WsServer wsServer;

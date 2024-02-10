@@ -24,7 +24,7 @@ void GameServer::run(uint16_t port) {
    wsServer.run();
 }
 
-void GameServer::broadcast_message(const string &message) {
+void GameServer::broadcastMessage(const string &message) {
 
    for (auto &connection : connections) {
       this->sendMessage(connection, message);
@@ -34,7 +34,7 @@ void GameServer::broadcast_message(const string &message) {
 void GameServer::onOpen(ConnectionHdl hdl) {
 
    array<byte, 2> tag = tagPool->allocateTag();
-   GameUser *user = new GameUser(tag);
+   GameUser *user = new GameUser(tag, hdl);
    user->setRoom(this->lobby);
    this->users[tag] = user;
 

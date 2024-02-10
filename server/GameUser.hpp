@@ -4,9 +4,12 @@
 #include <string>
 #include <array>
 
+#include <websocketpp/config/asio_no_tls.hpp>
+
 #include "Location.hpp"
 
 using namespace std;
+using ConnectionHdl = connection_hdl;
 
 // Forward declaration to avoid circular dependencies
 class GameRoom;
@@ -26,6 +29,8 @@ private:
     * @brief The username of the game user.
    */
    string userName;
+
+   ConnectionHdl* connection;
 
    /**
     * @brief Pointer to the Location object representing the user's position in the game.
@@ -48,7 +53,11 @@ public:
     *
     * @param userName The username of the game user.
    */
-   GameUser(array<byte, 2> userTag);
+   GameUser(array<byte, 2> userTag, ConnectionHdl connection);
+
+   array<byte, 2> getTag();
+
+   ConnectionHdl getConnection();
 
    /**
     * @brief Sets the username for the game user.
