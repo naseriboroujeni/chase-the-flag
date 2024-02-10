@@ -1,9 +1,11 @@
 #ifndef GAME_CLIENT_HPP
 #define GAME_CLIENT_HPP
 
+#include <iostream>
+#include <string>
+
 #include <websocketpp/config/asio_no_tls.hpp>
 #include <websocketpp/client.hpp>
-#include <iostream>
 #include <websocketpp/common/thread.hpp>
 
 using namespace std;
@@ -16,28 +18,67 @@ class GameClient {
 
 public:
    /**
-    * Constructor for the GameClient class.
+    * @brief Constructor for the GameClient class.
    */
    GameClient();
 
    /**
-    * Runs the WebSocket client and connects to the specified URI.
+    * @brief Runs the WebSocket client and connects to the specified URI.
     * 
     * @param uri The URI of the WebSocket server to connect to.
    */
    void run(const string &uri);
 
    /**
-    * Sends a message to the connected WebSocket server.
+    * @brief Sends a message to the connected WebSocket server.
     * 
     * @param message The message to send.
    */
    void sendMessage(const string message);
 
    /**
-    * Closes the connection to the WebSocket server.
+    * @brief Closes the connection to the WebSocket server.
    */
    void closeConnection();
+
+   /**
+    * @brief Updates the player's movement in the game.
+    * 
+    * @param move The movement command (e.g., "u" for up, "d" for down).
+   */
+   void updatePlayerMovement(string move);
+
+   /**
+    * @brief Joins a specific game room.
+    * 
+    * @param roomName The name of the room to join.
+   */
+   void joinRoom(string roomName);
+
+   /**
+    * @brief Leaves the current game room.
+   */
+   void leaveRoom();
+
+   /**
+    * @brief Sets the username for the player.
+    * 
+    * @param username The desired username.
+   */
+   void setUsername(string username);
+
+   /**
+    * @brief Retrieves the list of available game rooms.
+   */
+   void getListofRooms();
+
+   /**
+    * @brief Creates a new game room.
+    * 
+    * @param roomName The name of the new room to create.
+   */
+   void createRoom(string roomName);
+
 
 private:
    WsClient wsClient;

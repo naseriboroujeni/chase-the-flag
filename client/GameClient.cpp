@@ -35,3 +35,27 @@ void GameClient::connect(const string uri) {
    con = wsClient.get_connection(uri, ec);
    wsClient.connect(con);
 }
+
+void GameClient::updatePlayerMovement(string move) {
+   // TODO
+}
+
+void GameClient::joinRoom(string roomName) {
+   // TODO
+}
+
+void GameClient::leaveRoom() {
+   // TODO
+}
+
+void GameClient::setUsername(string username) {
+   // TODO
+}
+
+void GameClient::getListofRooms() {
+   // TODO
+}
+
+void GameClient::createRoom(string roomName) {
+   // TODO
+}
