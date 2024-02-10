@@ -1,6 +1,7 @@
 #ifndef GAME_ROOM_HPP
 #define GAME_ROOM_HPP
 
+#include <string>
 #include <vector>
 
 using namespace std;
@@ -44,6 +45,13 @@ public:
     * @param joinedUser Pointer to the GameUser object to be removed.
    */
    void removeUser(GameUser* joinedUser);
+
+   /**
+    * Gets all users joined the room.
+    * 
+    * @return Vector of joined users.
+   */
+   vector<GameUser*> getAllUsers();
 
    /**
     * @brief Destructor for the GameRoom class.

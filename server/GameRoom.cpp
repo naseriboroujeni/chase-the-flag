@@ -18,5 +18,9 @@ void GameRoom::removeUser(GameUser* gameUser) {
    }
 }
 
+vector<GameUser*> GameRoom::getAllUsers() {
+   return this->joinedUsers;
+}
+
 GameRoom::~GameRoom() {
 }
