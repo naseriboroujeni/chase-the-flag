@@ -159,10 +159,10 @@ private:
    /**
     * @brief Handles the Move player update message.
     * 
-    * @param hdl The connection handle.
+    * @param player Pointer to the GameUser object representing the player.
     * @param msg The received message.
    */
-   void handleMove(ConnectionHdl hdl, WsServer::message_ptr msg);
+   void handleMove(GameUser* player, WsServer::message_ptr msg);
 
    /**
     * @brief Handles the SendMessage player update message.
