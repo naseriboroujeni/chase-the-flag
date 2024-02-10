@@ -23,19 +23,24 @@ enum class MessageType : uint8_t {
    PlayerUpdate = 0x01   /**< Represents a player update message exchanged between the server and clients. */
 };
 
+/**
+ * @brief Enumerates the different types of system messages exchanged between the server and clients.
+ * These message types does not require user's specific tag.
+*/
 enum class SystemMessageType : uint8_t {
    CreateRoom = 0x00, /**< Request for creating a new game room. */
    ListRooms = 0x01,  /**< Request for creating a new game room. */
-   JoinRoom = 0x02,   /**< Request for joining a specific game room. */
-   LeaveRoom = 0x03,  /**< Request for leaving the current game room. */
 };
 
 /**
  * @brief Enumerates the different types of player update messages exchanged between the server and clients.
+ * These message types require user's specific tag.
 */
 enum class PlayerUpdateType : uint8_t {
-   Move = 0x00,       /**< Request for updating the player's movement in the game. */
-   SendMessage = 0x01 /**< Request for sending a chat message. */
+   Move = 0x00,        /**< Request for updating the player's movement in the game. */
+   SendMessage = 0x01, /**< Request for sending a chat message. */
+   JoinRoom = 0x02,    /**< Request for joining a specific game room. */
+   LeaveRoom = 0x03,   /**< Request for leaving the current game room. */
 };
 
 /**
@@ -81,11 +86,11 @@ private:
    /**
     * @brief Callback method called when a message is received from a client.
     *
-    * @param s Pointer to the WebSocket server instance.
+    * @param wsServer Pointer to the WebSocket server instance.
     * @param hdl The connection handle.
     * @param msg The received message.
    */
-   void onMessage(WsServer *s, ConnectionHdl hdl, WsServer::message_ptr msg);
+   void onMessage(WsServer *wsServer, ConnectionHdl hdl, WsServer::message_ptr msg);
 
    /**
     * @brief Callback method called when a client connection is closed.

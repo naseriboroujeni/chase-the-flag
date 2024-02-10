@@ -58,7 +58,7 @@ void GameServer::onClose(ConnectionHdl hdl) {
    connections.erase(hdl);
 }
 
-void GameServer::onMessage(WsServer *s, ConnectionHdl hdl, WsServer::message_ptr msg) {
+void GameServer::onMessage(WsServer *wsServer, ConnectionHdl hdl, WsServer::message_ptr msg) {
 
    if (msg->get_payload().empty()) {
       cerr << "Received empty message from client." << endl;
@@ -95,12 +95,6 @@ void GameServer::handleSystemMessage(ConnectionHdl hdl, WsServer::message_ptr ms
       case SystemMessageType::ListRooms:
          handleListRooms(hdl, msg);
          break;
-      case SystemMessageType::JoinRoom:
-         handleJoinRoom(hdl, msg);
-         break;
-      case SystemMessageType::LeaveRoom:
-         handleLeaveRoom(hdl, msg);
-         break;
    }
 }
 
@@ -118,6 +112,12 @@ void GameServer::handlePlayerUpdateMessage(ConnectionHdl hdl, WsServer::message_
          break;
       case PlayerUpdateType::SendMessage:
          handleSendMessage(hdl, msg);
+         break;
+      case PlayerUpdateType::JoinRoom:
+         handleJoinRoom(hdl, msg);
+         break;
+      case PlayerUpdateType::LeaveRoom:
+         handleLeaveRoom(hdl, msg);
          break;
       default:
          cerr << "Unknown player update type: " << static_cast<int>(playerUpdateType) << endl;
