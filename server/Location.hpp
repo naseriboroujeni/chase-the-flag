@@ -1,15 +1,6 @@
 #ifndef LOCATION_HPP
 #define LOCATION_HPP
 
-#include <cstdint>
-
-enum class MoveType : uint8_t {
-   UP = 0x00,
-   DOWN = 0x01,
-   RIGHT = 0x02,
-   LEFT = 0x03
-};
-
 /**
  * @brief The Location class represents a point in a 2D coordinate system.
 */

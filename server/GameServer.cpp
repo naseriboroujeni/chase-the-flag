@@ -1,6 +1,7 @@
 #include "GameServer.hpp"
 
 #include "GameExceptions.hpp"
+#include "CommonEnums.hpp"
 
 GameServer::GameServer() {
 
@@ -51,6 +52,7 @@ void GameServer::onOpen(ConnectionHdl hdl) {
 }
 
 void GameServer::sendMessage(ConnectionHdl connection, string message) {
+
    try {
       wsServer.send(connection, message, frame::opcode::text);
    }
@@ -67,8 +69,7 @@ void GameServer::onClose(ConnectionHdl hdl) {
 void GameServer::onMessage(WsServer *wsServer, ConnectionHdl hdl, WsServer::message_ptr msg) {
 
    if (msg->get_payload().empty()) {
-      cerr << "Received empty message from client." << endl;
-      return;
+      throw InvalidMessageException();
    }
 
    uint8_t messageTypeByte = msg->get_payload()[0];
@@ -82,8 +83,7 @@ void GameServer::onMessage(WsServer *wsServer, ConnectionHdl hdl, WsServer::mess
          handlePlayerUpdateMessage(hdl, msg);
          break;
       default:
-         cerr << "Unknown message type: " << static_cast<int>(messageType) << endl;
-         break;
+         throw InvalidMessageException();
    }
 }
 
@@ -131,6 +131,7 @@ void GameServer::handlePlayerUpdateMessage(ConnectionHdl hdl, WsServer::message_
 }
 
 void GameServer::handleCreateRoom(ConnectionHdl hdl, WsServer::message_ptr msg) {
+
    string roomName = msg->get_payload().substr(4);
    auto it = rooms.find(roomName);
    if (it != rooms.end()) {
@@ -142,6 +143,7 @@ void GameServer::handleCreateRoom(ConnectionHdl hdl, WsServer::message_ptr msg) 
 }
 
 void GameServer::handleListRooms(ConnectionHdl hdl, WsServer::message_ptr msg) {
+
    if (msg->get_payload().size() != 4) {
       throw InvalidMessageException();
    }
@@ -149,6 +151,7 @@ void GameServer::handleListRooms(ConnectionHdl hdl, WsServer::message_ptr msg) {
 }
 
 void GameServer::handleJoinRoom(GameUser* player, WsServer::message_ptr msg) {
+
    if (player->getRoom() == nullptr || player->getRoom() != lobby) {
       throw NotInAValidRoomException();
    }
@@ -211,6 +214,7 @@ void GameServer::handleMove(GameUser* player, WsServer::message_ptr msg) {
 }
 
 void GameServer::handleSendMessage(GameUser* msgSender, WsServer::message_ptr msg) {
+
    string messageContent = msg->get_payload().substr(4);
 
    if (msgSender->getRoom() == nullptr) {
