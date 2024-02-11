@@ -89,7 +89,7 @@ void GameServer::onMessage(WsServer *wsServer, ConnectionHdl hdl, WsServer::mess
 
 void GameServer::handleSystemMessage(ConnectionHdl hdl, WsServer::message_ptr msg) {
 
-   uint8_t systemMessageTypeByte = msg->get_payload()[3];
+   uint8_t systemMessageTypeByte = msg->get_payload()[1];
    SystemMessageType systemMessageType = static_cast<SystemMessageType>(systemMessageTypeByte);
 
    switch (systemMessageType) {
@@ -132,7 +132,7 @@ void GameServer::handlePlayerUpdateMessage(ConnectionHdl hdl, WsServer::message_
 
 void GameServer::handleCreateRoom(ConnectionHdl hdl, WsServer::message_ptr msg) {
 
-   string roomName = msg->get_payload().substr(4);
+   string roomName = msg->get_payload().substr(2);
    auto it = rooms.find(roomName);
    if (it != rooms.end()) {
       throw DuplicatedRoomNameException();

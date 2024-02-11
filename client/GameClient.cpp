@@ -1,5 +1,6 @@
 #include "GameClient.hpp"
 
+#include "CommonEnums.hpp"
 
 GameClient::GameClient() {
 
@@ -57,5 +58,10 @@ void GameClient::getListofRooms() {
 }
 
 void GameClient::createRoom(string roomName) {
-   // TODO
+   // Construct the system message for creating a room
+   string createRoomMessage = string(1, static_cast<char>(MessageType::SystemMessage)) +
+                              string(1, static_cast<char>(SystemMessageType::CreateRoom)) +
+                              roomName;
+
+   sendMessage(createRoomMessage);
 }

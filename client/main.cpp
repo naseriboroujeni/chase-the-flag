@@ -33,15 +33,15 @@ void handleUserCommands(GameClient* gameClient) {
          gameClient->closeConnection();
       }
       else if (input == "\\h") {
-         cout << "Available commands:"
-                 "\\h (for help),"
-                 "n (for create room),"
-                 "\\r (for get list of rooms),"
-                 "\\m (for move),"
-                 "\\s (to send a chat message),"
-                 "\\j (for joinRoom),"
-                 "\\l (for leaveRoom),"
-                 "\\u (for set username),"
+         cout << "Available commands:\n"
+                 "\\h (for help)\n"
+                 "\\n (for create room)\n"
+                 "\\r (for get list of rooms)\n"
+                 "\\m (for move)\n"
+                 "\\s (to send a chat message)\n"
+                 "\\j (for joinRoom)\n"
+                 "\\l (for leaveRoom)\n"
+                 "\\u (for set username)\n"
                  "\\c (for close)\n";
       }
       else if (input.size() == 4 && input.substr(0, 2) == "\\m") {
