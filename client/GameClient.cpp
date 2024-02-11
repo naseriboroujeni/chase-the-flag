@@ -57,7 +57,20 @@ void GameClient::getListofRooms() {
    // TODO
 }
 
+void GameClient::sendChatMessage(string message) {
+
+   // Construct the player update message for sending a chat message
+   string tagString = {static_cast<char>(tag[0]), static_cast<char>(tag[1])};
+   string chatMessage = string(1, static_cast<char>(MessageType::PlayerUpdate)) +
+                        string(1, static_cast<char>(PlayerUpdateType::SendMessage)) +
+                        tagString +
+                        message;
+
+   sendMessage(chatMessage);
+}
+
 void GameClient::createRoom(string roomName) {
+
    // Construct the system message for creating a room
    string createRoomMessage = string(1, static_cast<char>(MessageType::SystemMessage)) +
                               string(1, static_cast<char>(SystemMessageType::CreateRoom)) +

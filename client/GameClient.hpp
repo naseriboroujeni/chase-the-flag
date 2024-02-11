@@ -72,6 +72,8 @@ public:
    */
    void getListofRooms();
 
+   void sendChatMessage(string message);
+
    /**
     * @brief Creates a new game room.
     * 
@@ -83,6 +85,8 @@ public:
 private:
    WsClient wsClient;
    WsClient::connection_ptr con;
+
+   array<byte, 2> tag;
 
    /**
     * Callback method called when a message is received from the server.

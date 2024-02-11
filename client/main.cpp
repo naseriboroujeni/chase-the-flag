@@ -52,7 +52,7 @@ void handleUserCommands(GameClient* gameClient) {
       else if (input.size() >= 4 && input.substr(0, 2) == "\\s") {
          // Process send message command
          string message = input.substr(3); // Extract the message after "\s "
-         gameClient->sendMessage(message);
+         gameClient->sendChatMessage(message);
       }
       else if (input.size() >= 4 && input.substr(0, 2) == "\\j") {
          // Process joinRoom command
