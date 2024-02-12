@@ -46,8 +46,8 @@ void handleUserCommands(GameClient* gameClient) {
       }
       else if (input.size() == 4 && input.substr(0, 2) == "\\m") {
          // Process move command
-         string direction = input.substr(3); // Extract the direction after "\m "
-         gameClient->updatePlayerMovement(direction);
+         MoveType move = static_cast<MoveType>(input.at(3)); // Extract the direction after "\m "
+         gameClient->sendMove(move);
       }
       else if (input.size() >= 4 && input.substr(0, 2) == "\\s") {
          // Process send message command

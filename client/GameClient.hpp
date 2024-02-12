@@ -8,6 +8,8 @@
 #include <websocketpp/client.hpp>
 #include <websocketpp/common/thread.hpp>
 
+#include "CommonEnums.hpp"
+
 using namespace std;
 using namespace websocketpp;
 using WsClient = client<config::asio>;
@@ -46,7 +48,7 @@ public:
     * 
     * @param move The movement command (e.g., "u" for up, "d" for down).
    */
-   void updatePlayerMovement(string move);
+   void sendMove(MoveType move);
 
    /**
     * @brief Joins a specific game room.

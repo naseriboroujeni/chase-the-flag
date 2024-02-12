@@ -29,9 +29,9 @@ enum class PlayerUpdateType : uint8_t {
    LeaveRoom = 0x03,   /**< Request for leaving the current game room. */
 };
 
-enum class MoveType : uint8_t {
-   UP = 0x00,
-   DOWN = 0x01,
-   RIGHT = 0x02,
-   LEFT = 0x03
+enum class MoveType : char {
+   UP = 'u',
+   DOWN = 'd',
+   RIGHT = 'r',
+   LEFT = 'l'
 };

@@ -1,7 +1,5 @@
 #include "GameClient.hpp"
 
-#include "CommonEnums.hpp"
-
 GameClient::GameClient() {
 
    wsClient.set_message_handler([this](ConnectionHdl hdl, WsClient::message_ptr msg)
@@ -74,8 +72,15 @@ void GameClient::handleTagAssignement(WsClient::message_ptr msg) {
    this->tag = {static_cast<byte>(msg->get_payload()[2]), static_cast<byte>(msg->get_payload()[3])};
 }
 
-void GameClient::updatePlayerMovement(string move) {
-   // TODO
+void GameClient::sendMove(MoveType move) {
+   // Construct the player update message for sending movement
+   string tagString = {static_cast<char>(tag[0]), static_cast<char>(tag[1])};
+   string movementMessage = string(1, static_cast<char>(MessageType::PlayerUpdate)) +
+                           string(1, static_cast<char>(PlayerUpdateType::Move)) +
+                           tagString +
+                           static_cast<char>(move);;
+
+   sendMessage(movementMessage);
 }
 
 void GameClient::joinRoom(string roomName) {
