@@ -102,6 +102,10 @@ private:
     * @param uri The URI of the WebSocket server to connect to.
    */
    void connect(const string uri);
+
+   void handleSystemMessage(ConnectionHdl hdl, WsClient::message_ptr msg);
+
+   void handleTagAssignement(WsClient::message_ptr msg);
 };
 
 #endif // GAME_CLIENT_HPP

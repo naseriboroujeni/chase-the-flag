@@ -26,7 +26,39 @@ void GameClient::closeConnection() {
 
 void GameClient::on_message(ConnectionHdl hdl, WsClient::message_ptr msg) {
 
-   cout << "Received message from server: " << msg->get_payload() << endl;
+   if (msg->get_payload().empty()) {
+      cerr << "Received an empty message from the server." << endl;
+      return;
+   }
+
+   uint8_t messageTypeByte = msg->get_payload()[0];
+   MessageType messageType = static_cast<MessageType>(messageTypeByte);
+
+   switch (messageType) {
+      case MessageType::SystemMessage:
+         handleSystemMessage(hdl, msg);
+         break;
+      case MessageType::PlayerUpdate:
+         // handlePlayerUpdateMessage(hdl, msg);
+         break;
+      default:
+         cerr << "Received an invalid message type." << endl;
+         break;
+   }
+}
+
+void GameClient::handleSystemMessage(ConnectionHdl hdl, WsClient::message_ptr msg) {
+   uint8_t systemMessageTypeByte = msg->get_payload()[1];
+   SystemMessageType systemMessageType = static_cast<SystemMessageType>(systemMessageTypeByte);
+
+   switch (systemMessageType) {
+      case SystemMessageType::AssignTag:
+         handleTagAssignement(msg);
+         break;
+      default:
+         cerr << "Received an invalid system message type." << endl;
+         break;
+   }
 }
 
 void GameClient::connect(const string uri) {
@@ -35,6 +67,11 @@ void GameClient::connect(const string uri) {
    lib::error_code ec;
    con = wsClient.get_connection(uri, ec);
    wsClient.connect(con);
+}
+
+void GameClient::handleTagAssignement(WsClient::message_ptr msg) {
+
+   this->tag = {static_cast<byte>(msg->get_payload()[2]), static_cast<byte>(msg->get_payload()[3])};
 }
 
 void GameClient::updatePlayerMovement(string move) {
