@@ -5,7 +5,7 @@
 GameClient::GameClient() {
 
    wsClient.set_message_handler([this](ConnectionHdl hdl, WsClient::message_ptr msg)
-                                { on_message(hdl, msg); });
+                                { onMessage(hdl, msg); });
 }
 
 void GameClient::run(const string &uri) {
@@ -24,7 +24,7 @@ void GameClient::closeConnection() {
    wsClient.close(con, websocketpp::close::status::normal, "done");
 }
 
-void GameClient::on_message(ConnectionHdl hdl, WsClient::message_ptr msg) {
+void GameClient::onMessage(ConnectionHdl hdl, WsClient::message_ptr msg) {
 
    if (msg->get_payload().empty()) {
       cerr << "Received an empty message from the server." << endl;
@@ -91,7 +91,12 @@ void GameClient::setUsername(string username) {
 }
 
 void GameClient::getListofRooms() {
-   // TODO
+
+   // Construct the system message for listing rooms
+   string listRoomsMessage = string(1, static_cast<char>(MessageType::SystemMessage)) +
+                              string(1, static_cast<char>(SystemMessageType::ListRooms));
+
+   sendMessage(listRoomsMessage);
 }
 
 void GameClient::sendChatMessage(string message) {

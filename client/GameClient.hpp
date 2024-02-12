@@ -94,7 +94,7 @@ private:
     * @param hdl The connection handle.
     * @param msg The received message.
    */
-   void on_message(ConnectionHdl hdl, WsClient::message_ptr msg);
+   void onMessage(ConnectionHdl hdl, WsClient::message_ptr msg);
 
    /**
     * Connects to the specified WebSocket server URI.

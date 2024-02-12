@@ -151,7 +151,7 @@ void GameServer::handleCreateRoom(ConnectionHdl hdl, WsServer::message_ptr msg) 
 
 void GameServer::handleListRooms(ConnectionHdl hdl, WsServer::message_ptr msg) {
 
-   if (msg->get_payload().size() != 4) {
+   if (msg->get_payload().size() != 2) {
       throw InvalidMessageException();
    }
    // TODO
