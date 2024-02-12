@@ -31,24 +31,31 @@ void GameServer::run(uint16_t port) {
 void GameServer::broadcastMessage(GameRoom* room, const string &message) {
 
    for (auto &user : room->getAllUsers()) {
-      this->sendMessage(*user->getConnection(), message);
+      this->sendMessage(user->getConnection(), message);
    }
 }
 
 void GameServer::onOpen(ConnectionHdl hdl) {
 
    array<byte, 2> tag = tagPool->allocateTag();
-   GameUser *user = new GameUser(tag, &hdl);
+   GameUser* user = new GameUser(tag, hdl);
    user->setRoom(this->lobby);
    this->users[tag] = user;
 
-   try {
-      wsServer.send(hdl, tag.data(), 2, frame::opcode::binary);
-   } catch (const error_code &e) {
-      cerr << "Error sending tag to client: " << e.message() << endl;
-   }
+   this->sendTagMessage(user);
 
    connections.insert(hdl);
+}
+
+void GameServer::sendTagMessage(GameUser* user) {
+
+   // Construct the system message for assigning the tag
+   string tagString = {static_cast<char>(user->getTag()[0]), static_cast<char>(user->getTag()[1])};
+   string assignTagMessage = string(1, static_cast<char>(MessageType::SystemMessage)) +
+                             string(1, static_cast<char>(SystemMessageType::AssignTag)) +
+                             tagString;
+
+   sendMessage(user->getConnection(), assignTagMessage);
 }
 
 void GameServer::sendMessage(ConnectionHdl connection, string message) {
@@ -106,10 +113,10 @@ void GameServer::handleSystemMessage(ConnectionHdl hdl, WsServer::message_ptr ms
 
 void GameServer::handlePlayerUpdateMessage(ConnectionHdl hdl, WsServer::message_ptr msg) {
 
-   array<byte, 2> playerTag = {byte(msg->get_payload()[1]), byte(msg->get_payload()[2])};
+   array<byte, 2> playerTag = {byte(msg->get_payload()[2]), byte(msg->get_payload()[3])};
    GameUser* player = users[playerTag];
 
-   uint8_t playerUpdateTypeByte = msg->get_payload()[3];
+   uint8_t playerUpdateTypeByte = msg->get_payload()[1];
    PlayerUpdateType playerUpdateType = static_cast<PlayerUpdateType>(playerUpdateTypeByte);
 
    switch (playerUpdateType) {
@@ -117,7 +124,7 @@ void GameServer::handlePlayerUpdateMessage(ConnectionHdl hdl, WsServer::message_
          handleMove(player, msg);
          break;
       case PlayerUpdateType::SendMessage:
-         handleSendMessage(player, msg);
+         handleChatMessage(player, msg);
          break;
       case PlayerUpdateType::JoinRoom:
          handleJoinRoom(player, msg);
@@ -213,7 +220,7 @@ void GameServer::handleMove(GameUser* player, WsServer::message_ptr msg) {
    }
 }
 
-void GameServer::handleSendMessage(GameUser* msgSender, WsServer::message_ptr msg) {
+void GameServer::handleChatMessage(GameUser* msgSender, WsServer::message_ptr msg) {
 
    string messageContent = msg->get_payload().substr(4);
 
@@ -226,4 +233,5 @@ void GameServer::handleSendMessage(GameUser* msgSender, WsServer::message_ptr ms
 
    // Broadcast the message to all users in the same room
    broadcastMessage(msgSender->getRoom(), formattedMessage);
+   // sendTagMessage(msgSender);
 }

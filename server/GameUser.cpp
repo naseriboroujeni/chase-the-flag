@@ -1,7 +1,7 @@
 #include "GameRoom.hpp"
 #include "GameUser.hpp"
 
-GameUser::GameUser(array<byte, 2> userTag, ConnectionHdl* connection) {
+GameUser::GameUser(array<byte, 2> userTag, ConnectionHdl connection) {
    this->userTag = userTag;
    this->userName = "";
    this->connection = connection;
@@ -14,7 +14,7 @@ array<byte, 2> GameUser::getTag() {
    return this->userTag;
 }
 
-ConnectionHdl* GameUser::getConnection() {
+ConnectionHdl GameUser::getConnection() {
    return this->connection;
 }
 

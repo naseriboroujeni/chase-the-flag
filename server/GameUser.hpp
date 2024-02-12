@@ -30,7 +30,7 @@ private:
    */
    string userName;
 
-   ConnectionHdl* connection;
+   ConnectionHdl connection;
 
    /**
     * @brief Pointer to the Location object representing the user's position in the game.
@@ -53,7 +53,7 @@ public:
     *
     * @param userName The username of the game user.
    */
-   GameUser(array<byte, 2> userTag, ConnectionHdl* connection);
+   GameUser(array<byte, 2> userTag, ConnectionHdl connection);
 
    /**
     * @brief Gets the tag assigned to the game user.
@@ -67,7 +67,7 @@ public:
     *
     * @return Pointer to the connection handle.
    */
-   ConnectionHdl* getConnection();
+   ConnectionHdl getConnection();
 
    /**
     * @brief Sets the username for the game user.

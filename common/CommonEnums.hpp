@@ -13,8 +13,9 @@ enum class MessageType : uint8_t {
  * These message types does not require user's specific tag.
 */
 enum class SystemMessageType : uint8_t {
-   CreateRoom = 0x00, /**< Request for creating a new game room. */
-   ListRooms = 0x01,  /**< Request for creating a new game room. */
+   AssignTag = 0x00, /**< Send user's assigned tag on openning th socket.*/
+   CreateRoom = 0x01, /**< Request for creating a new game room. */
+   ListRooms = 0x02,  /**< Request for creating a new game room. */
 };
 
 /**

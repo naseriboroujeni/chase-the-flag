@@ -58,6 +58,13 @@ private:
    void onOpen(ConnectionHdl hdl);
 
    /**
+    * @brief Sends the assigned tag to the connected user as a system message.
+    * 
+    * @param user Pointer to the GameUser object representing the connected user.
+   */
+   void sendTagMessage(GameUser* user);
+
+   /**
     * @brief Callback method called when a message is received from a client.
     *
     * @param wsServer Pointer to the WebSocket server instance.
@@ -143,7 +150,7 @@ private:
     * @param msgSender Pointer to the GameUser object representing the sender of the message.
     * @param msg The received message.
    */
-   void handleSendMessage(GameUser* msgSender, WsServer::message_ptr msg);
+   void handleChatMessage(GameUser* msgSender, WsServer::message_ptr msg);
 };
 
 #endif // GAME_SERVER_HPP
