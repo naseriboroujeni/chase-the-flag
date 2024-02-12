@@ -79,11 +79,26 @@ void GameClient::updatePlayerMovement(string move) {
 }
 
 void GameClient::joinRoom(string roomName) {
-   // TODO
+
+   // Construct the player update message for joining the room
+   string tagString = {static_cast<char>(tag[0]), static_cast<char>(tag[1])};
+   string joinRoomMessage = string(1, static_cast<char>(MessageType::PlayerUpdate)) +
+                           string(1, static_cast<char>(PlayerUpdateType::JoinRoom)) +
+                           tagString +
+                           roomName;
+
+   sendMessage(joinRoomMessage);
 }
 
 void GameClient::leaveRoom() {
-   // TODO
+
+   // Construct the player update message for leaving the room
+   string tagString = {static_cast<char>(tag[0]), static_cast<char>(tag[1])};
+   string leaveRoomMessage = string(1, static_cast<char>(MessageType::PlayerUpdate)) +
+                           string(1, static_cast<char>(PlayerUpdateType::LeaveRoom)) +
+                           tagString;
+
+   sendMessage(leaveRoomMessage);
 }
 
 void GameClient::setUsername(string username) {
