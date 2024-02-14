@@ -105,9 +105,33 @@ private:
    */
    void connect(const string uri);
 
-   void handleSystemMessage(ConnectionHdl hdl, WsClient::message_ptr msg);
+   /**
+    * @brief Handles system messages received from the server.
+    * 
+    * @param msg The received system message.
+   */
+   void handleSystemMessage(string msg);
 
-   void handleTagAssignement(WsClient::message_ptr msg);
+   /**
+    * @brief Handles tag assignment messages received from the server.
+    * 
+    * @param msg The received tag assignment message.
+   */
+   void handleTagAssignement(string msg);
+
+   /**
+    * @brief Handles player update messages received from the server.
+    * 
+    * @param msg The received player update message.
+   */
+   void handlePlayerUpdateMessage(string msg);
+
+   /**
+    * @brief Handles chat messages received from the server.
+    * 
+    * @param msg The received chat message.
+   */
+   void handleRecievedChatMessage(string msg);
 };
 
 #endif // GAME_CLIENT_HPP

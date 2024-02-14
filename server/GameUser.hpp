@@ -51,7 +51,7 @@ public:
    /**
     * @brief Constructor for the GameUser class.
     *
-    * @param userName The username of the game user.
+    * @param username The username of the game user.
    */
    GameUser(array<byte, 2> userTag, ConnectionHdl connection);
 

@@ -29,15 +29,16 @@ void GameClient::onMessage(ConnectionHdl hdl, WsClient::message_ptr msg) {
       return;
    }
 
-   uint8_t messageTypeByte = msg->get_payload()[0];
+   string payload = msg->get_payload();
+   uint8_t messageTypeByte = payload[0];
    MessageType messageType = static_cast<MessageType>(messageTypeByte);
 
    switch (messageType) {
       case MessageType::SystemMessage:
-         handleSystemMessage(hdl, msg);
+         handleSystemMessage(payload.substr(1));
          break;
       case MessageType::PlayerUpdate:
-         // handlePlayerUpdateMessage(hdl, msg);
+         handlePlayerUpdateMessage(payload.substr(1));
          break;
       default:
          cerr << "Received an invalid message type." << endl;
@@ -45,13 +46,13 @@ void GameClient::onMessage(ConnectionHdl hdl, WsClient::message_ptr msg) {
    }
 }
 
-void GameClient::handleSystemMessage(ConnectionHdl hdl, WsClient::message_ptr msg) {
-   uint8_t systemMessageTypeByte = msg->get_payload()[1];
+void GameClient::handleSystemMessage(string msg) {
+   uint8_t systemMessageTypeByte = msg[0];
    SystemMessageType systemMessageType = static_cast<SystemMessageType>(systemMessageTypeByte);
 
    switch (systemMessageType) {
       case SystemMessageType::AssignTag:
-         handleTagAssignement(msg);
+         handleTagAssignement(msg.substr(1));
          break;
       default:
          cerr << "Received an invalid system message type." << endl;
@@ -67,9 +68,28 @@ void GameClient::connect(const string uri) {
    wsClient.connect(con);
 }
 
-void GameClient::handleTagAssignement(WsClient::message_ptr msg) {
+void GameClient::handleTagAssignement(string msg) {
 
-   this->tag = {static_cast<byte>(msg->get_payload()[2]), static_cast<byte>(msg->get_payload()[3])};
+   this->tag = {static_cast<byte>(msg[0]), static_cast<byte>(msg[1])};
+}
+
+void GameClient::handlePlayerUpdateMessage(string msg) {
+
+   uint8_t playerUpdateTypeByte = msg[0];
+   PlayerUpdateType playerUpdateType = static_cast<PlayerUpdateType>(playerUpdateTypeByte);
+
+   switch (playerUpdateType) {
+      case PlayerUpdateType::SendMessage:
+         handleRecievedChatMessage(msg.substr(3));
+         break;
+   }
+}
+
+void GameClient::handleRecievedChatMessage(string msg) {
+
+   string messageContent = msg;
+
+   cout << messageContent << endl;
 }
 
 void GameClient::sendMove(MoveType move) {

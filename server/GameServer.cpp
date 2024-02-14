@@ -231,11 +231,16 @@ void GameServer::handleChatMessage(GameUser* msgSender, WsServer::message_ptr ms
       throw NotInAValidRoomException();
    }
 
-   // Construct the formatted message to be broadcasted
+   // Construct the chat message to be broadcasted
+   string tagString = {static_cast<char>(msgSender->getTag()[0]), static_cast<char>(msgSender->getTag()[1])};
    string formattedMessage = "[" + msgSender->getUsername() + "]: " + messageContent;
+   string chatMessage = string(1, static_cast<char>(MessageType::PlayerUpdate)) +
+                        string(1, static_cast<char>(PlayerUpdateType::SendMessage)) +
+                        tagString +
+                        formattedMessage;
 
    // Broadcast the message to all users in the same room
-   broadcastMessage(msgSender->getRoom(), formattedMessage);
+   broadcastMessage(msgSender->getRoom(), chatMessage);
 }
 
 void GameServer::handleSetUsername(GameUser* player, WsServer::message_ptr msg) {
