@@ -157,7 +157,16 @@ void GameServer::handleListRooms(ConnectionHdl hdl, WsServer::message_ptr msg) {
    if (msg->get_payload().size() != 2) {
       throw InvalidMessageException();
    }
-   // TODO
+
+   string roomNames = "";
+   for(auto const& imap: rooms) {
+      roomNames += imap.first + ", ";
+   }
+
+   string roomNamesMessage = string(1, static_cast<char>(MessageType::SystemMessage)) +
+                             string(1, static_cast<char>(SystemMessageType::ListRooms)) +
+                             roomNames.substr(0, roomNames.length() - 2);
+   sendMessage(hdl, roomNamesMessage);
 }
 
 void GameServer::handleJoinRoom(GameUser* player, WsServer::message_ptr msg) {

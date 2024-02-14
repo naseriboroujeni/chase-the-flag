@@ -115,9 +115,9 @@ private:
    /**
     * @brief Handles tag assignment messages received from the server.
     * 
-    * @param msg The received tag assignment message.
+    * @param tag The received tag assignment message.
    */
-   void handleTagAssignement(string msg);
+   void handleTagAssignement(string tag);
 
    /**
     * @brief Handles player update messages received from the server.
@@ -129,9 +129,16 @@ private:
    /**
     * @brief Handles chat messages received from the server.
     * 
-    * @param msg The received chat message.
+    * @param chatMessage The received chat message.
    */
-   void handleRecievedChatMessage(string msg);
+   void handleRecievedChatMessage(string chatMessage);
+
+   /**
+    * @brief Handles room names received from the server.
+    * 
+    * @param chatMessage The received room names separated by ','.
+   */
+   void handleListRooms(string roomNames);
 };
 
 #endif // GAME_CLIENT_HPP

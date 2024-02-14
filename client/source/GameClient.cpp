@@ -54,6 +54,9 @@ void GameClient::handleSystemMessage(string msg) {
       case SystemMessageType::AssignTag:
          handleTagAssignement(msg.substr(1));
          break;
+      case SystemMessageType::ListRooms:
+         handleListRooms(msg.substr(1));
+         break;
       default:
          cerr << "Received an invalid system message type." << endl;
          break;
@@ -68,9 +71,9 @@ void GameClient::connect(const string uri) {
    wsClient.connect(con);
 }
 
-void GameClient::handleTagAssignement(string msg) {
+void GameClient::handleTagAssignement(string tag) {
 
-   this->tag = {static_cast<byte>(msg[0]), static_cast<byte>(msg[1])};
+   this->tag = {static_cast<byte>(tag[0]), static_cast<byte>(tag[1])};
 }
 
 void GameClient::handlePlayerUpdateMessage(string msg) {
@@ -87,11 +90,14 @@ void GameClient::handlePlayerUpdateMessage(string msg) {
    }
 }
 
-void GameClient::handleRecievedChatMessage(string msg) {
+void GameClient::handleRecievedChatMessage(string chatMessage) {
 
-   string messageContent = msg;
+   cout << chatMessage << endl;
+}
 
-   cout << messageContent << endl;
+void GameClient::handleListRooms(string roomNames) {
+
+   cout << roomNames << endl;
 }
 
 void GameClient::sendMove(MoveType move) {
