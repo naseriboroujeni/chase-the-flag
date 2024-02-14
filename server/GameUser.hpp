@@ -28,7 +28,7 @@ private:
    /**
     * @brief The username of the game user.
    */
-   string userName;
+   string username;
 
    ConnectionHdl connection;
 
@@ -74,14 +74,14 @@ public:
     *
     * @param userName The username of the game user.
    */
-   void setUserName(string userName);
+   void setUsername(string userName);
 
    /**
     * @brief Gets the username of the game user.
     *
     * @return The username.
    */
-   string getUserName();
+   string getUsername();
 
    /**
     * @brief Gets the Location object representing the user's position in the game.

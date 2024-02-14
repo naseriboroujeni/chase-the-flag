@@ -107,7 +107,15 @@ void GameClient::leaveRoom() {
 }
 
 void GameClient::setUsername(string username) {
-   // TODO
+
+   // Construct the player update message for setting username
+   string tagString = {static_cast<char>(tag[0]), static_cast<char>(tag[1])};
+   string setUsernameMessage = string(1, static_cast<char>(MessageType::PlayerUpdate)) +
+                               string(1, static_cast<char>(PlayerUpdateType::SetUsername)) +
+                               tagString +
+                               username;
+
+   sendMessage(setUsernameMessage);
 }
 
 void GameClient::getListofRooms() {

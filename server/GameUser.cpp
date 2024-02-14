@@ -3,7 +3,7 @@
 
 GameUser::GameUser(array<byte, 2> userTag, ConnectionHdl connection) {
    this->userTag = userTag;
-   this->userName = "";
+   this->username = "";
    this->connection = connection;
    this->location = new Location();
    this->collectedPoints = 0;
@@ -18,12 +18,12 @@ ConnectionHdl GameUser::getConnection() {
    return this->connection;
 }
 
-void GameUser::setUserName(string userName) {
-   this->userName = userName;
+void GameUser::setUsername(string username) {
+   this->username = username;
 }
 
-string GameUser::getUserName() {
-   return this->userName;
+string GameUser::getUsername() {
+   return this->username;
 }
 
 Location* GameUser::getLocation() {

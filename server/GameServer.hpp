@@ -151,6 +151,14 @@ private:
     * @param msg The received message.
    */
    void handleChatMessage(GameUser* msgSender, WsServer::message_ptr msg);
+
+   /**
+    * @brief Handles setting SetUsername player update message.
+    * 
+    * @param player Pointer to the GameUser object representing the player.
+    * @param msg The received message.
+   */
+   void handleSetUsername(GameUser* player, WsServer::message_ptr msg);
 };
 
 #endif // GAME_SERVER_HPP

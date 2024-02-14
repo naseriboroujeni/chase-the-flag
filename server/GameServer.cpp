@@ -42,7 +42,7 @@ void GameServer::onOpen(ConnectionHdl hdl) {
    user->setRoom(this->lobby);
    this->users[tag] = user;
 
-   this->sendTagMessage(user);
+   sendTagMessage(user);
 
    connections.insert(hdl);
 }
@@ -131,6 +131,9 @@ void GameServer::handlePlayerUpdateMessage(ConnectionHdl hdl, WsServer::message_
          break;
       case PlayerUpdateType::LeaveRoom:
          handleLeaveRoom(player, msg);
+         break;
+      case PlayerUpdateType::SetUsername:
+         handleSetUsername(player, msg);
          break;
       default:
          throw InvalidMessageException();
@@ -229,9 +232,19 @@ void GameServer::handleChatMessage(GameUser* msgSender, WsServer::message_ptr ms
    }
 
    // Construct the formatted message to be broadcasted
-   string formattedMessage = "[" + msgSender->getUserName() + "]: " + messageContent;
+   string formattedMessage = "[" + msgSender->getUsername() + "]: " + messageContent;
 
    // Broadcast the message to all users in the same room
    broadcastMessage(msgSender->getRoom(), formattedMessage);
-   // sendTagMessage(msgSender);
+}
+
+void GameServer::handleSetUsername(GameUser* player, WsServer::message_ptr msg) {
+
+   string username = msg->get_payload().substr(4);
+
+   if (player->getRoom() == nullptr || player->getRoom() != lobby) {
+      throw NotInAValidRoomException();
+   }
+
+   player->setUsername(username);
 }

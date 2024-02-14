@@ -27,6 +27,7 @@ enum class PlayerUpdateType : uint8_t {
    SendMessage = 0x01, /**< Request for sending a chat message. */
    JoinRoom = 0x02,    /**< Request for joining a specific game room. */
    LeaveRoom = 0x03,   /**< Request for leaving the current game room. */
+   SetUsername = 0x04  /**< Request for setting gameUser's username */
 };
 
 enum class MoveType : char {
