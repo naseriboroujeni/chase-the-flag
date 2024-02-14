@@ -5,7 +5,10 @@ file(GLOB_RECURSE CLIENT_SOURCES "*.cpp")
 add_executable(Client ${CLIENT_SOURCES})
 
 # Include the common directory for shared code
-target_include_directories(Client PRIVATE ${CMAKE_SOURCE_DIR}/common)
+target_include_directories(Client PRIVATE
+   ${CMAKE_SOURCE_DIR}/common
+   ${CMAKE_SOURCE_DIR}/client/include
+)
 
 # Include directories
 target_include_directories(Client PRIVATE ${WEBSOCKETPP_INCLUDE_DIR})

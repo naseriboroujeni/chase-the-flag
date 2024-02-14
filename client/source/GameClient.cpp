@@ -82,6 +82,8 @@ void GameClient::handlePlayerUpdateMessage(string msg) {
       case PlayerUpdateType::SendMessage:
          handleRecievedChatMessage(msg.substr(3));
          break;
+      default:
+         cerr << "Received an invalid system message type." << endl;
    }
 }
 
