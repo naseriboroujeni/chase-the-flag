@@ -26,6 +26,12 @@ private:
    */
    vector<GameUser*> joinedUsers;
 
+   GameUser* targetPlayer;
+
+   bool isPlaying;
+
+   void updatePlayingStatus();
+
 public:
    /**
     * @brief Default constructor for the GameRoom class.
