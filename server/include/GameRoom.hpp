@@ -41,6 +41,16 @@ private:
    */
    void updatePlayingStatus();
 
+   /**
+    * @brief Starts the game in the room.
+   */
+   void startGame();
+
+   /**
+    * @brief Stops the ongoing game in the room.
+   */
+   void stopGame();
+
 public:
    /**
     * @brief Default constructor for the GameRoom class.
@@ -62,6 +72,13 @@ public:
    void removeUser(GameUser* joinedUser);
 
    /**
+    * @brief Gets the name assosiated to the room.
+    * 
+    * @return The name of the room.
+   */
+   string getName();
+
+   /**
     * @brief Gets all users joined the room.
     * 
     * @return Vector of joined users.
@@ -81,6 +98,11 @@ public:
     * @return True if the game is in progress, false otherwise.
    */
    bool getIsPlaying();
+
+   /**
+    * @brief Sets new player as target.
+   */
+   void restartGame();
 
    /**
     * @brief Destructor for the GameRoom class.

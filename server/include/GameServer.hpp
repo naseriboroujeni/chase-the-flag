@@ -155,6 +155,13 @@ private:
    void handleMove(GameUser* player, WsServer::message_ptr msg);
 
    /**
+    * @brief Checks is the player has won the game after its move.
+    * 
+    * @param player The player who has moved and needs to check win status.
+   */
+   void checkWinner(GameUser* player);
+
+   /**
     * @brief Creates a location update message to send to player(s).
     * 
     * @return The location update message.

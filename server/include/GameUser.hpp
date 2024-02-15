@@ -63,6 +63,11 @@ public:
    array<byte, 2> getTag();
 
    /**
+    * @brief Increases player's collected points.
+   */
+   void addPoint();
+
+   /**
     * @brief Gets the WebSocket connection handle for the user.
     *
     * @return Pointer to the connection handle.

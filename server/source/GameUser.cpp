@@ -14,6 +14,11 @@ array<byte, 2> GameUser::getTag() {
    return this->userTag;
 }
 
+void GameUser::addPoint() {
+
+   this->collectedPoints++;
+}
+
 ConnectionHdl GameUser::getConnection() {
    return this->connection;
 }

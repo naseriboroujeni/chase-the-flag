@@ -251,8 +251,17 @@ void GameServer::handleMove(GameUser* player, WsServer::message_ptr msg) {
    if (player->getRoom()->getTargetPlayer() == player) {
       broadcastMessage(player->getRoom(), locationMessage);
    } else {
-      // check winner
+      checkWinner(player);
       sendMessage(player->getConnection(), locationMessage);
+   }
+}
+
+void GameServer::checkWinner(GameUser* player) {
+
+   if (player->getLocation()->operator==(*player->getRoom()->getTargetPlayer()->getLocation())) {
+      cout << "Player " << player->getUsername() << " has won in room " << player->getRoom()->getName() << endl;
+      player->addPoint();
+      player->getRoom()->restartGame();
    }
 }
 

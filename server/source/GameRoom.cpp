@@ -32,16 +32,36 @@ void GameRoom::removeUser(GameUser* gameUser) {
 void GameRoom::updatePlayingStatus() {
 
    if (!this->isPlaying && this->joinedUsers.size() >= MIN_PLAYERS_TO_START) {
-      isPlaying = true;
-      int randomPlayerIndex = rand() % this->joinedUsers.size();
-      this->targetPlayer = this->joinedUsers[randomPlayerIndex];
+      startGame();
       return;
    }
    if (this->isPlaying && this->joinedUsers.size() < MIN_PLAYERS_TO_START) {
-      isPlaying = false;
-      this->targetPlayer = NULL;
+      stopGame();
       return;
    }
+}
+
+void GameRoom::startGame() {
+
+   isPlaying = true;
+   int randomPlayerIndex = rand() % this->joinedUsers.size();
+   this->targetPlayer = this->joinedUsers[randomPlayerIndex];
+}
+
+void GameRoom::stopGame() {
+
+   isPlaying = false;
+   this->targetPlayer = NULL;
+}
+
+void GameRoom::restartGame() {
+
+   startGame();
+}
+
+string GameRoom::getName() {
+
+   return this->name;
 }
 
 vector<GameUser*> GameRoom::getAllUsers() {
