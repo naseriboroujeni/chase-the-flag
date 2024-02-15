@@ -82,6 +82,15 @@ private:
    void onClose(ConnectionHdl hdl);
 
    /**
+    * @brief This method gets called when there is any exception in handling client's messages.
+    * Sends a brief of the exception occured in the server to the client.
+    * 
+    * @param hdl Connection to the client the exception occured for.
+    * @param ex The exception that has been occured.
+   */
+   void onException(ConnectionHdl hdl, const std::exception& ex);
+
+   /**
     * @brief Sends a message to a specific connection.
     * 
     * @param connection The connection handle to which the message should be sent.

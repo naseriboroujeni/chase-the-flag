@@ -154,6 +154,13 @@ private:
     * @param chatMessage The received room names separated by ','.
    */
    void handleListRooms(string roomNames);
+
+   /**
+    * @brief Handles exception message recieved from the server.
+    * 
+    * @param exceptionMessage The recieved exception message.
+   */
+   void handleExceptionMessage(string exceptionMessage);
 };
 
 #endif // GAME_CLIENT_HPP

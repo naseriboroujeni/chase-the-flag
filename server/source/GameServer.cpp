@@ -73,23 +73,36 @@ void GameServer::onClose(ConnectionHdl hdl) {
 
 void GameServer::onMessage(WsServer *wsServer, ConnectionHdl hdl, WsServer::message_ptr msg) {
 
-   if (msg->get_payload().empty()) {
-      throw InvalidMessageException();
-   }
-
-   uint8_t messageTypeByte = msg->get_payload()[0];
-   MessageType messageType = static_cast<MessageType>(messageTypeByte);
-
-   switch (messageType) {
-      case MessageType::SystemMessage:
-         handleSystemMessage(hdl, msg);
-         break;
-      case MessageType::PlayerUpdate:
-         handlePlayerUpdateMessage(hdl, msg);
-         break;
-      default:
+   try {
+      if (msg->get_payload().empty()) {
          throw InvalidMessageException();
+      }
+
+      uint8_t messageTypeByte = msg->get_payload()[0];
+      MessageType messageType = static_cast<MessageType>(messageTypeByte);
+
+      switch (messageType) {
+         case MessageType::SystemMessage:
+            handleSystemMessage(hdl, msg);
+            break;
+         case MessageType::PlayerUpdate:
+            handlePlayerUpdateMessage(hdl, msg);
+            break;
+         default:
+            throw InvalidMessageException();
+      }
+   } catch(const std::exception& ex) {
+      onException(hdl, ex);
    }
+}
+
+void GameServer::onException(ConnectionHdl hdl, const std::exception& ex) {
+
+   string exceptionMessage = string(1, static_cast<char>(MessageType::SystemMessage)) +
+                             string(1, static_cast<char>(SystemMessageType::Exception)) +
+                             ex.what();
+   
+   sendMessage(hdl, exceptionMessage);
 }
 
 void GameServer::handleSystemMessage(ConnectionHdl hdl, WsServer::message_ptr msg) {

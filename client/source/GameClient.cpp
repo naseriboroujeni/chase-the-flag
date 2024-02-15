@@ -59,6 +59,9 @@ void GameClient::handleSystemMessage(string msg) {
       case SystemMessageType::ListRooms:
          handleListRooms(msg.substr(1));
          break;
+      case SystemMessageType::Exception:
+         handleExceptionMessage(msg.substr(1));
+         break;
       default:
          cerr << "Received an invalid system message type." << endl;
          break;
@@ -193,4 +196,9 @@ void GameClient::createRoom(string roomName) {
                               roomName;
 
    sendMessage(createRoomMessage);
+}
+
+void GameClient::handleExceptionMessage(string exceptionMessage) {
+
+   cout << "Exception Occured: " << exceptionMessage << endl;
 }
