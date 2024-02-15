@@ -92,7 +92,7 @@ public:
 
 
 private:
-   WsClient wsClient;
+   WsClient* wsClient;
    WsClient::connection_ptr con;
 
    array<byte, 2> tag;

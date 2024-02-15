@@ -2,24 +2,25 @@
 
 GameClient::GameClient() {
 
-   wsClient.set_message_handler([this](ConnectionHdl hdl, WsClient::message_ptr msg)
+   this->wsClient = new WsClient();
+   wsClient->set_message_handler([this](ConnectionHdl hdl, WsClient::message_ptr msg)
                                 { onMessage(hdl, msg); });
 }
 
 void GameClient::run(const string &uri) {
 
    connect(uri);
-   wsClient.run();
+   wsClient->run();
 }
 
 void GameClient::sendMessage(const string message) {
 
-   wsClient.send(con, message, frame::opcode::text);
+   wsClient->send(con, message, frame::opcode::text);
 }
 
 void GameClient::closeConnection() {
 
-   wsClient.close(con, websocketpp::close::status::normal, "done");
+   wsClient->close(con, websocketpp::close::status::normal, "done");
 }
 
 void GameClient::onMessage(ConnectionHdl hdl, WsClient::message_ptr msg) {
@@ -66,10 +67,10 @@ void GameClient::handleSystemMessage(string msg) {
 
 void GameClient::connect(const string uri) {
 
-   wsClient.init_asio();
+   wsClient->init_asio();
    lib::error_code ec;
-   con = wsClient.get_connection(uri, ec);
-   wsClient.connect(con);
+   con = wsClient->get_connection(uri, ec);
+   wsClient->connect(con);
 }
 
 void GameClient::handleTagAssignement(string tag) {
