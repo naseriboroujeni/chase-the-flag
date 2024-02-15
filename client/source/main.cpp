@@ -10,7 +10,6 @@ int main() {
 
    GameClient* gameClient = new GameClient();
 
-   // Run the client with the provided URI
    thread t1(&GameClient::run, gameClient, SERVER_URI);
 
    handleUserCommands(gameClient);
@@ -19,6 +18,7 @@ int main() {
 }
 
 void handleUserCommands(GameClient* gameClient) {
+
    bool done = false;
    while (!done) {
       string input;

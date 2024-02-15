@@ -12,8 +12,7 @@ class GameUser;
 /**
  * @brief Represents a game room that can contain multiple users.
 */
-class GameRoom
-{
+class GameRoom {
 
 private:
    /**

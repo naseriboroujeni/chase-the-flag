@@ -81,6 +81,11 @@ public:
    */
    void getListofRooms();
 
+   /**
+    * @brief Sends a chat message to the connected WebSocket server.
+    * 
+    * @param message The content of the chat message to send.
+   */
    void sendChatMessage(string message);
 
    /**

@@ -4,8 +4,7 @@
 /**
  * @brief The Location class represents a point in a 2D coordinate system.
 */
-class Location
-{
+class Location {
 
 private:
    /**
