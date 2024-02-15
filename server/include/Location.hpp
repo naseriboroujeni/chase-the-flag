@@ -69,9 +69,12 @@ public:
    int getX();
 
    /**
-    * @brief Destructor for the Location class.
+    * @brief Overloads the equality operator (==) to compare two locations for equality.
+    * 
+    * @param other The Location object to compare with.
+    * @return True if the locations are equal, false otherwise.
    */
-   ~Location();
+   bool operator==(const Location& other) const;
 };
 
 #endif // LOCATION_HPP
