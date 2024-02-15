@@ -38,4 +38,11 @@ public:
    }
 };
 
+class GameNotInProgressException : public std::exception {
+public:
+   const char* what() const noexcept override {
+      return "There is no in progress game in the room.";
+   }
+};
+
 #endif // GAME_EXCEPTIONS_HPP

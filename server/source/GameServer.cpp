@@ -43,8 +43,6 @@ void GameServer::onOpen(ConnectionHdl hdl) {
    this->users[tag] = user;
 
    sendTagMessage(user);
-
-   connections.insert(hdl);
 }
 
 void GameServer::sendTagMessage(GameUser* user) {
@@ -70,7 +68,7 @@ void GameServer::sendMessage(ConnectionHdl connection, string message) {
 
 void GameServer::onClose(ConnectionHdl hdl) {
 
-   connections.erase(hdl);
+   // TODO
 }
 
 void GameServer::onMessage(WsServer *wsServer, ConnectionHdl hdl, WsServer::message_ptr msg) {
@@ -159,7 +157,7 @@ void GameServer::handleListRooms(ConnectionHdl hdl, WsServer::message_ptr msg) {
    }
 
    string roomNames = "";
-   for(auto const& imap: rooms) {
+   for(auto const& imap: this->rooms) {
       roomNames += imap.first + ", ";
    }
 
@@ -206,6 +204,10 @@ void GameServer::handleMove(GameUser* player, WsServer::message_ptr msg) {
       throw NotInAValidRoomException();
    }
 
+   if (!player->getRoom()->getIsPlaying()) {
+      throw GameNotInProgressException();
+   }
+
    if (msg->get_payload().size() != 5) {
       throw InvalidMessageException();
    }
@@ -230,6 +232,27 @@ void GameServer::handleMove(GameUser* player, WsServer::message_ptr msg) {
       default:
          throw InvalidMessageException();
    }
+
+   string locationMessage = createLocationMessage(player);
+
+   if (player->getRoom()->getTargetPlayer() == player) {
+      broadcastMessage(player->getRoom(), locationMessage);
+   } else {
+      // check winner
+      sendMessage(player->getConnection(), locationMessage);
+   }
+}
+
+string GameServer::createLocationMessage(GameUser* player) {
+
+   string tagString = {static_cast<char>(player->getTag()[0]), static_cast<char>(player->getTag()[1])};
+   string locationMessage = string(1, static_cast<char>(MessageType::PlayerUpdate)) +
+                           string(1, static_cast<char>(PlayerUpdateType::Move)) +
+                           tagString +
+                           static_cast<char>(player->getLocation()->getX()) +
+                           static_cast<char>(player->getLocation()->getY());
+
+   return locationMessage;
 }
 
 void GameServer::handleChatMessage(GameUser* msgSender, WsServer::message_ptr msg) {

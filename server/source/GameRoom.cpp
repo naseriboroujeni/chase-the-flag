@@ -5,6 +5,8 @@
 
 #include "math.h"
 
+int MIN_PLAYERS_TO_START = 2;
+
 GameRoom::GameRoom(string name) {
 
    this->name = name;
@@ -29,13 +31,13 @@ void GameRoom::removeUser(GameUser* gameUser) {
 
 void GameRoom::updatePlayingStatus() {
 
-   if (!this->isPlaying && this->joinedUsers.size() >= 3) {
+   if (!this->isPlaying && this->joinedUsers.size() >= MIN_PLAYERS_TO_START) {
       isPlaying = true;
       int randomPlayerIndex = rand() % this->joinedUsers.size();
       this->targetPlayer = this->joinedUsers[randomPlayerIndex];
       return;
    }
-   if (this->isPlaying && this->joinedUsers.size() < 3) {
+   if (this->isPlaying && this->joinedUsers.size() < MIN_PLAYERS_TO_START) {
       isPlaying = false;
       this->targetPlayer = NULL;
       return;
@@ -45,6 +47,16 @@ void GameRoom::updatePlayingStatus() {
 vector<GameUser*> GameRoom::getAllUsers() {
 
    return this->joinedUsers;
+}
+
+GameUser* GameRoom::getTargetPlayer() {
+
+   return this->targetPlayer;
+}
+
+bool GameRoom::getIsPlaying() {
+
+   return this->isPlaying;
 }
 
 GameRoom::~GameRoom() {

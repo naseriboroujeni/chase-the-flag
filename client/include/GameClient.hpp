@@ -15,7 +15,14 @@ using namespace websocketpp;
 using WsClient = client<config::asio>;
 using ConnectionHdl = connection_hdl;
 
-
+/**
+ * @brief Represents a WebSocket client for a multiplayer game.
+ * 
+ * The GameClient class manages the WebSocket connection to a game server,
+ * allowing players to interact with the game, send messages, and receive updates.
+ * It provides methods for various actions such as sending messages, joining game rooms,
+ * updating player movement, and handling server responses.
+*/
 class GameClient {
 
 public:
@@ -91,7 +98,7 @@ private:
    array<byte, 2> tag;
 
    /**
-    * Callback method called when a message is received from the server.
+    * @brief Callback method called when a message is received from the server.
     * 
     * @param hdl The connection handle.
     * @param msg The received message.
@@ -125,6 +132,14 @@ private:
     * @param msg The received player update message.
    */
    void handlePlayerUpdateMessage(string msg);
+
+   /**
+    * @brief Handles location messages received from the server.
+    * 
+    * @param tag The tag associated with the player the location is related to.
+    * @param location The location information received from the server.
+   */
+   void handleRecievedLocationMessage(string tag, string location);
 
    /**
     * @brief Handles chat messages received from the server.

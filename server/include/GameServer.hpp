@@ -43,12 +43,13 @@ public:
 
 private:
    WsServer wsServer;
-   set<ConnectionHdl, owner_less<ConnectionHdl>> connections;
 
    TagPool* tagPool;
+
    GameRoom* lobby;
-   map<array<byte, 2>, GameUser*> users;
    map<string, GameRoom*> rooms;
+
+   map<array<byte, 2>, GameUser*> users;
 
    /**
     * @brief Callback method called when a new client connection is opened.
@@ -143,6 +144,13 @@ private:
     * @param msg The received message.
    */
    void handleMove(GameUser* player, WsServer::message_ptr msg);
+
+   /**
+    * @brief Creates a location update message to send to player(s).
+    * 
+    * @return The location update message.
+   */
+   string createLocationMessage(GameUser* player);
 
    /**
     * @brief Handles the SendMessage player update message.

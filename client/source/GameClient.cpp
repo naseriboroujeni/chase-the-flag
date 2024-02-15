@@ -47,6 +47,7 @@ void GameClient::onMessage(ConnectionHdl hdl, WsClient::message_ptr msg) {
 }
 
 void GameClient::handleSystemMessage(string msg) {
+
    uint8_t systemMessageTypeByte = msg[0];
    SystemMessageType systemMessageType = static_cast<SystemMessageType>(systemMessageTypeByte);
 
@@ -85,9 +86,24 @@ void GameClient::handlePlayerUpdateMessage(string msg) {
       case PlayerUpdateType::SendMessage:
          handleRecievedChatMessage(msg.substr(3));
          break;
+      case PlayerUpdateType::Move:
+         handleRecievedLocationMessage(msg.substr(1, 2), msg.substr(3));
+         break;
       default:
          cerr << "Received an invalid system message type." << endl;
    }
+}
+
+void GameClient::handleRecievedLocationMessage(string tag, string location) {
+
+   string tagString = {static_cast<char>(tag[0]), static_cast<char>(tag[1])};
+
+   if (tagString == tag) {
+      cout << "Your current location is: ";
+   } else {
+      cout << "Target current location is: ";
+   }
+   cout << location[0] << ", " << location[1] << endl;
 }
 
 void GameClient::handleRecievedChatMessage(string chatMessage) {
@@ -101,12 +117,13 @@ void GameClient::handleListRooms(string roomNames) {
 }
 
 void GameClient::sendMove(MoveType move) {
+
    // Construct the player update message for sending movement
    string tagString = {static_cast<char>(tag[0]), static_cast<char>(tag[1])};
    string movementMessage = string(1, static_cast<char>(MessageType::PlayerUpdate)) +
                            string(1, static_cast<char>(PlayerUpdateType::Move)) +
                            tagString +
-                           static_cast<char>(move);;
+                           static_cast<char>(move);
 
    sendMessage(movementMessage);
 }

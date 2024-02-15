@@ -26,10 +26,19 @@ private:
    */
    vector<GameUser*> joinedUsers;
 
+   /**
+    * @brief The player that others have to chase.
+   */
    GameUser* targetPlayer;
 
+   /**
+    * @brief Indicates if there is an ongoing game in the room.
+   */
    bool isPlaying;
 
+   /**
+    * Updates isPlaying based on number of users in the room.
+   */
    void updatePlayingStatus();
 
 public:
@@ -53,11 +62,25 @@ public:
    void removeUser(GameUser* joinedUser);
 
    /**
-    * Gets all users joined the room.
+    * @brief Gets all users joined the room.
     * 
     * @return Vector of joined users.
    */
    vector<GameUser*> getAllUsers();
+
+   /**
+    * @brief Gets room's target player.
+    * 
+    * @return The target player.
+   */
+   GameUser* getTargetPlayer();
+
+   /**
+    * @brief Gets the playing status of the game room.
+    * 
+    * @return True if the game is in progress, false otherwise.
+   */
+   bool getIsPlaying();
 
    /**
     * @brief Destructor for the GameRoom class.
