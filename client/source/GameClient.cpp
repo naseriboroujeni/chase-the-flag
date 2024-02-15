@@ -97,14 +97,14 @@ void GameClient::handlePlayerUpdateMessage(string msg) {
 
 void GameClient::handleRecievedLocationMessage(string tag, string location) {
 
-   string tagString = {static_cast<char>(tag[0]), static_cast<char>(tag[1])};
+   string tagString = {static_cast<char>(this->tag[0]), static_cast<char>(this->tag[1])};
 
    if (tagString == tag) {
       cout << "Your current location is: ";
    } else {
       cout << "Target current location is: ";
    }
-   cout << location[0] << ", " << location[1] << endl;
+   cout << int(location[0]) << ", " << int(location[1]) << endl;
 }
 
 void GameClient::handleRecievedChatMessage(string chatMessage) {
