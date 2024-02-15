@@ -68,7 +68,17 @@ void GameServer::sendMessage(ConnectionHdl connection, string message) {
 
 void GameServer::onClose(ConnectionHdl hdl) {
 
-   // TODO
+   for(auto const& user: this->users) {
+      GameUser* leavingPlayer = user.second;
+      if (
+         !leavingPlayer->getConnection().owner_before(hdl) &&
+         !hdl.owner_before(leavingPlayer->getConnection()))
+      {
+         leavingPlayer->getRoom()->removeUser(leavingPlayer);
+         users.erase(leavingPlayer->getTag());
+         delete leavingPlayer;
+      }
+   }
 }
 
 void GameServer::onMessage(WsServer *wsServer, ConnectionHdl hdl, WsServer::message_ptr msg) {
