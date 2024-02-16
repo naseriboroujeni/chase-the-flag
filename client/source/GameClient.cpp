@@ -3,8 +3,14 @@
 GameClient::GameClient() {
 
    this->wsClient = new WsClient();
+
    wsClient->set_message_handler([this](ConnectionHdl hdl, WsClient::message_ptr msg)
                                 { onMessage(hdl, msg); });
+
+   wsClient->clear_access_channels(
+      websocketpp::log::alevel::frame_header |
+      websocketpp::log::alevel::frame_payload
+   );
 }
 
 void GameClient::run(const string &uri) {

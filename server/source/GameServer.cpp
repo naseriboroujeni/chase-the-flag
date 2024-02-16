@@ -18,6 +18,11 @@ GameServer::GameServer() {
 
    wsServer.set_close_handler([this](ConnectionHdl hdl)
                               { onClose(hdl); });
+
+   wsServer.clear_access_channels(
+      websocketpp::log::alevel::frame_header |
+      websocketpp::log::alevel::frame_payload
+   );
 }
 
 void GameServer::run(uint16_t port) {
