@@ -76,6 +76,7 @@ void GameServer::onClose(ConnectionHdl hdl) {
       {
          leavingPlayer->getRoom()->removeUser(leavingPlayer);
          users.erase(leavingPlayer->getTag());
+         tagPool->deallocateTag(leavingPlayer->getTag());
          delete leavingPlayer;
          break;
       }
