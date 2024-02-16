@@ -5,21 +5,23 @@
 
 GameServer::GameServer() {
 
+   this->wsServer = new WsServer();
+
    this->lobby = new GameRoom("Lobby");
    this->rooms["LOBBY"] = lobby;
 
    this->tagPool = new TagPool();
 
-   wsServer.set_message_handler([this](ConnectionHdl hdl, WsServer::message_ptr msg)
-                                { onMessage(&wsServer, hdl, msg); });
+   this->wsServer->set_message_handler([this](ConnectionHdl hdl, WsServer::message_ptr msg)
+                                { onMessage(wsServer, hdl, msg); });
 
-   wsServer.set_open_handler([this](ConnectionHdl hdl)
+   this->wsServer->set_open_handler([this](ConnectionHdl hdl)
                              { onOpen(hdl); });
 
-   wsServer.set_close_handler([this](ConnectionHdl hdl)
+   this->wsServer->set_close_handler([this](ConnectionHdl hdl)
                               { onClose(hdl); });
 
-   wsServer.clear_access_channels(
+   this->wsServer->clear_access_channels(
       websocketpp::log::alevel::frame_header |
       websocketpp::log::alevel::frame_payload
    );
@@ -27,10 +29,10 @@ GameServer::GameServer() {
 
 void GameServer::run(uint16_t port) {
 
-   wsServer.init_asio();
-   wsServer.listen(port);
-   wsServer.start_accept();
-   wsServer.run();
+   this->wsServer->init_asio();
+   this->wsServer->listen(port);
+   this->wsServer->start_accept();
+   this->wsServer->run();
 }
 
 void GameServer::broadcastMessage(GameRoom* room, const string &message) {
@@ -64,7 +66,7 @@ void GameServer::sendTagMessage(GameUser* user) {
 void GameServer::sendMessage(ConnectionHdl connection, string message) {
 
    try {
-      wsServer.send(connection, message, frame::opcode::text);
+      this->wsServer->send(connection, message, frame::opcode::text);
    }
    catch (const error_code &e) {
       cerr << "Error sending message to client: " << e.message() << endl;
@@ -88,7 +90,7 @@ void GameServer::onClose(ConnectionHdl hdl) {
    }
 }
 
-void GameServer::onMessage(WsServer *wsServer, ConnectionHdl hdl, WsServer::message_ptr msg) {
+void GameServer::onMessage(WsServer* wsServer, ConnectionHdl hdl, WsServer::message_ptr msg) {
 
    try {
       if (msg->get_payload().empty()) {

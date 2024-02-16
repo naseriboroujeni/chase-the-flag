@@ -42,7 +42,7 @@ public:
    void broadcastMessage(GameRoom* room, const string &message);
 
 private:
-   WsServer wsServer;
+   WsServer* wsServer;
 
    TagPool* tagPool;
 
@@ -72,7 +72,7 @@ private:
     * @param hdl The connection handle.
     * @param msg The received message.
    */
-   void onMessage(WsServer *wsServer, ConnectionHdl hdl, WsServer::message_ptr msg);
+   void onMessage(WsServer* wsServer, ConnectionHdl hdl, WsServer::message_ptr msg);
 
    /**
     * @brief Callback method called when a client connection is closed.
